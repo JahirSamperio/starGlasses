@@ -1,4 +1,5 @@
 import express from 'express';
+import routes from '../routes/routes.js';
 
 class Server {
     constructor() {
@@ -15,7 +16,7 @@ class Server {
     // }
 
     routes() {
-        this.app.use(require('../routes/routes'));
+        this.app.use(routes);
     }
 
     listen() {
