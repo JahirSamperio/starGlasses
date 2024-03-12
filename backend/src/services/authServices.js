@@ -1,4 +1,4 @@
-import {login} from '../models/auth';
+import {login} from '../models/auth.js';
 
 const loginService = async (email, password) => {
     try {
