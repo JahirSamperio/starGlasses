@@ -15,7 +15,7 @@ export default function ProductCard(){
                 <CardMedia component="img" image="https://via.placeholder.com/200" height="200" alt="imagen pitera" />
                 <CardContent>
                     <Typography component="p" variant="body2">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        Nombre del producto lol 
                     </Typography>
                 </CardContent>
             </CardActionArea>
