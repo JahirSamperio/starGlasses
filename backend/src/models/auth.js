@@ -14,5 +14,22 @@ function login(email, password){
         )
     })
 }
+//Registro de usuario
+function registerModel({email, password}){
+    // const fecha_registro = new Date().toISOString();
+    return new Promise((resolve, reject) =>{
+        conexion.query(
+        `INSERT INTO usuario (email, password)
+        VALUES ('${email}','${password}')`, function (error, result, field) {
+            if(error)
+                return reject(error);
+            return resolve(result);
+        }
+        )
+    })
+}
 
-export {login};
+export {
+    login,
+    registerModel
+};

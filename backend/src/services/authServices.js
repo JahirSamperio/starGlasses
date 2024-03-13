@@ -1,4 +1,4 @@
-import {login} from '../models/auth.js';
+import {login, registerModel} from '../models/auth.js';
 
 const loginService = async (email, password) => {
     try {
@@ -8,5 +8,16 @@ const loginService = async (email, password) => {
         return error;
     }
 }
+const registerService = async (data) => {
+    try {
+        let response = await registerModel(data)
+        return response;
+    } catch (error) {
+        return error;
+    }
+}
 
-export default loginService;
+export {
+    loginService, 
+    registerService
+};
