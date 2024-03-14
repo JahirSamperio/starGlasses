@@ -52,7 +52,9 @@ const registerController = async (req, res) => {
             password,
             token: 123
         });
-        console.log('usuario');
+        return res.status(200).json({
+            msg: "Usuario creado exitosamente"
+        });
 
     } catch (err) {
         console.log(err);
