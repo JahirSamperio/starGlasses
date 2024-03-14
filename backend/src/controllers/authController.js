@@ -34,18 +34,28 @@ const registerController = async (req, res) => {
             return res.status(400).json({ errores: errores.array() });
         }
 
+        //extraer los datos
+        const {nombre, email, password} = req.body;
+
         //Verificar que no haya duplicados
-        const existeUsuario = await Usuario.findOne({where: {email: req.body.email}});
+        const existeUsuario = await Usuario.findOne({where: { email }});
         if(existeUsuario) {
             return res.json({
                 msg: "Este usuario ya existe"
             })
-        } else{
-            const usuario = await Usuario.create(req.body);
-            res.json(usuario);
         }
+        console.log(nombre, email, password);
+
+        await Usuario.create({
+            nombre, 
+            email, 
+            password,
+            token: 123
+        });
+        console.log('usuario');
 
     } catch (err) {
+        console.log(err);
         res.status(500).json({ 
             error: 'Ocurrió un error al procesar la solicitud' 
         });
