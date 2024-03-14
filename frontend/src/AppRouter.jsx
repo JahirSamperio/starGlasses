@@ -3,17 +3,18 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register"
 import NavBar from "./components/navBar/NavBar";
+import { Products } from "./pages/Products";
 
 
 const navArrayLinks = [
   {
-      title: "Home", path: "/", icon: null
+      title: "Inicio", path: "/", icon: null
   },
   {
-      title: "Login", path: "/login", icon: null
+    title: "Productos", path: "/products", icon:null 
   },
   {
-      title: "Register", path: "/register", icon: null 
+      title: "Citas", path: "/appointment-schudlement", icon: null
   }
 ]
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" element = {<Home/>}/>
         <Route path="/login" element = {<Login/>}/>
         <Route path="/register" element= {<Register/>}/>
+        <Route path="/products" element={<Products/>}/>
       </Routes>
       
     </>

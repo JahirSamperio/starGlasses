@@ -9,20 +9,23 @@ export default function ProductCard(){
             "&:hover":{
                 transform:"scale(1.05)"
             }, 
-            width:200
+            width:{lg:250,sm:220, xs: 300},
+            
         }}>
             <CardActionArea>
-                <CardMedia component="img" image="https://via.placeholder.com/200" height="200" alt="imagen pitera" />
+                <CardMedia component="img" image="https://via.placeholder.com/200" height={{lg:200}} alt="imagen pitera" sx={{padding:"8px 6px"}} />
                 <CardContent>
                     <Typography component="p" variant="body2">
                         Nombre del producto lol 
+                    </Typography>
+                    <Typography sx={{mt:"5px"}}>
+                        $0000.00
                     </Typography>
                 </CardContent>
             </CardActionArea>
 
             <CardActions>
-                <Button  >Ver más</Button>
-                <Button variant="contained" color="error">Agregar al carrito</Button>
+                <Button variant="contained"  sx={{fontSize:"12px", flexGrow:1}}>ver más</Button>
             </CardActions>
 
         </Card>
