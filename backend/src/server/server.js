@@ -1,7 +1,7 @@
 import express from 'express';
 import routes from '../routes/routes.js';
 import cors from 'cors';
-import {dbConnection} from '../db/conexion.js';
+import conexion from '../db/conexion.js';
 
 class Server {
     constructor() {
@@ -20,7 +20,8 @@ class Server {
 
     async conectarBD(){
         try {
-            dbConnection();
+            await conexion.authenticate();
+            // conexion.sync();
             console.log('Base de datos en linea');
         } catch(error){
             throw new Error(error);

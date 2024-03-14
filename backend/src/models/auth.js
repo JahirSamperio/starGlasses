@@ -1,4 +1,4 @@
-import {conexion} from '../db/conexion.js';
+import conexion from '../db/conexion.js';
 
 //Inicio de sesion
 function login(email, password){
