@@ -1,6 +1,8 @@
 import {loginService } from "../services/authServices.js";
 import Usuario from '../models/Usuario.js'
 import { check, validationResult } from 'express-validator';
+import { generateId } from "../helpers/tokens.js";
+import { emailRegistro } from "../helpers/emails.js";
 
 
 const loginController = async (req = request, res = response) => {
@@ -44,16 +46,23 @@ const registerController = async (req, res) => {
                 msg: "Este usuario ya existe"
             })
         }
-        console.log(nombre, email, password);
 
-        await Usuario.create({
+        const usuario = await Usuario.create({
             nombre, 
             email, 
             password,
-            token: 123
+            token: generateId()
         });
-        return res.status(200).json({
-            msg: "Usuario creado exitosamente"
+        
+        res.json({
+            msg: "Hemos enviado un correo de confirmacion, confirme su cuenta"
+        });
+
+        //Envia email de confirmacion
+        emailRegistro({
+            nombre: usuario.nombre,
+            email: usuario.email,
+            token: usuario.token,
         });
 
     } catch (err) {
@@ -64,8 +73,20 @@ const registerController = async (req, res) => {
     }
 }
 
+//Funcion que comprueba una cuenta
+const confirmarController = async (req, res, next) => {
+    const {token} = req.params
+    console.log(token);
+
+    //Verificar si el codigo es valido
+
+    //Confirmar cuenta
+    
+}
+
 
 export {
     loginController,
-    registerController
+    registerController,
+    confirmarController
 };
