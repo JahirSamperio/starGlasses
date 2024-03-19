@@ -5,6 +5,7 @@ import { generateId } from "../helpers/tokens.js";
 import { emailRegistro } from "../helpers/emails.js";
 
 
+//Autenticacion del usuario
 const loginController = async (req = request, res = response) => {
     const {email, password} = req.body;
     try {
@@ -23,7 +24,10 @@ const loginController = async (req = request, res = response) => {
         });
     }
 }
+
+//Registro de usuario
 const registerController = async (req, res) => {
+    console.log(req.csrfToken());
     try {
          //Validacion
         await check('nombre').notEmpty().withMessage('El nombre no puede ir vacio').run(req);
@@ -74,19 +78,35 @@ const registerController = async (req, res) => {
 }
 
 //Funcion que comprueba una cuenta
-const confirmarController = async (req, res, next) => {
+const confirmarController = async (req, res) => {
     const {token} = req.params
-    console.log(token);
 
-    //Verificar si el codigo es valido
+    //Verificar si el token es valido
+    const usuario = await Usuario.findOne({where: {token}});
+    if(!usuario) {
+        return res.status(401).json({
+            msg: 'Token no válido'
+        })
+    }
 
     //Confirmar cuenta
+    usuario.token=null;
+    usuario.confirmado=true;
+    await usuario.save(); //Guarda los datos modificados anteriormente
+    return res.status(200).json({
+        msg: 'Cuenta confirmada. Ya puedes iniciar sesion'
+    })
+}
+
+const resetPassword = async (req, res) => {
     
 }
+
 
 
 export {
     loginController,
     registerController,
-    confirmarController
+    confirmarController,
+    resetPassword
 };
