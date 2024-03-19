@@ -37,10 +37,10 @@ class Server {
         this.app.use(express.json());
 
         //Habilitar cookie parser
-        this.app.use(cookieParser());
+        //this.app.use(cookieParser());
         
         //Habilitar CSRF
-        this.app.use(csrf({cookie: true}));
+        //this.app.use(csrf({cookie: true}));
     }
 
     routes() {
