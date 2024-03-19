@@ -2,7 +2,7 @@ import {loginService } from "../services/authServices.js";
 import Usuario from '../models/Usuario.js'
 import { check, validationResult } from 'express-validator';
 import { generateId } from "../helpers/tokens.js";
-import { emailRegistro } from "../helpers/emails.js";
+import { emailRegistro, emailResetPassword } from "../helpers/emails.js";
 
 
 //Autenticacion del usuario
@@ -27,7 +27,6 @@ const loginController = async (req = request, res = response) => {
 
 //Registro de usuario
 const registerController = async (req, res) => {
-    console.log(req.csrfToken());
     try {
          //Validacion
         await check('nombre').notEmpty().withMessage('El nombre no puede ir vacio').run(req);
@@ -37,7 +36,9 @@ const registerController = async (req, res) => {
         let errores = validationResult(req);
         
         if (!errores.isEmpty()) {
-            return res.status(400).json({ errores: errores.array() });
+            return res.status(400).json({ 
+                errores: errores.array() 
+            });
         }
 
         //extraer los datos
@@ -99,7 +100,43 @@ const confirmarController = async (req, res) => {
 }
 
 const resetPassword = async (req, res) => {
-    
+    try {
+         //Validacion
+        await check('email').isEmail().withMessage('Correo no valido').run(req);
+
+        let errores = validationResult(req);
+        
+        if (!errores.isEmpty()) {
+            //Errores
+            return res.status(400).json({ 
+                errores: errores.array() 
+            });
+        }
+        const {email} = req.body;
+
+        const usuario = await Usuario.findOne({where: {email}});
+        if(!usuario){
+            return res.status(401).json({
+                msg: "Este email no pertenece a ningun usuario"
+            })
+        }
+
+        //Generar id
+        usuario.token = generateId();
+        await usuario.save();
+
+        //Enviar email
+        emailResetPassword({
+            email: usuario.email,
+            token: usuario.token,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ 
+            error: 'Ocurrió un error al procesar la solicitud' 
+        });
+    }
 }
 
 

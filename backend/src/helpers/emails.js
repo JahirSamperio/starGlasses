@@ -31,6 +31,36 @@ const emailRegistro = async (datos) => {
     })
 }
 
+const emailResetPassword = async (datos) => { 
+    const transport = nodemailer.createTransport({
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASSWORD
+        }
+    });
+    const {email, token } = datos;
+
+    //enviar email
+    
+    await transport.sendMail({
+        from: 'StarGlasses.com',
+        to: email,
+        subject: 'Restablecer contraseña en StarGlasses.com',
+        text: 'Restablecer contraseña en StarGlasses.com',
+        html: `
+            <h2>Restablecer contraseña</h2>
+            <p>Recibiste este correo porque solicitaste restablecer tu contraseña en StarGlasses.com.</p>
+            <p>Por favor, haz clic en el siguiente enlace para restablecer tu contraseña:</p>
+            <p><a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 3000}/reset-password/${token}" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Restablecer contraseña</a></p>
+            <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este correo electrónico.</p>
+            <p>Gracias,<br>El equipo de StarGlasses.com</p>
+        `
+    })
+}
+
 export {
-    emailRegistro
+    emailRegistro,
+    emailResetPassword
 }
