@@ -15,6 +15,7 @@ const emailRegistro = async (datos) => {
     const { nombre, email, token } = datos;
 
     //enviar email
+    
     await transport.sendMail({
         from: 'StarGlasses.com',
         to: email,
