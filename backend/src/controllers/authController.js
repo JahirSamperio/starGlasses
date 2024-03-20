@@ -1,26 +1,62 @@
-import {loginService } from "../services/authServices.js";
 import Usuario from '../models/Usuario.js'
 import { check, validationResult } from 'express-validator';
-import { generateId } from "../helpers/tokens.js";
+import bcrypt from 'bcrypt';
+import { generateId, generarJWT } from "../helpers/tokens.js";
 import { emailRegistro, emailResetPassword } from "../helpers/emails.js";
 
 
 //Autenticacion del usuario
-const loginController = async (req = request, res = response) => {
-    const {email, password} = req.body;
+const autenticar = async (req = request, res = response) => {
     try {
-        let response = await loginService(email, password);
-        if(response.lenght === 0) {
-            return res.status(404).json({
-                msg: "Usuario no encontrado"
+        //Validacion 
+        await check('email').isEmail().withMessage('Correo no valido').run(req);
+        await check('password').notEmpty().withMessage('Contraseña obligatoria').run(req);
+        let errores = validationResult(req);
+        
+        if (!errores.isEmpty()) {
+            return res.status(400).json({ 
+                errores: errores.array() 
+            });
+        }
+
+        //Extraer datos
+        const {email, password} = req.body;
+
+        //Verificar si el usuario existe
+        const usuario = await Usuario.findOne({where: { email }});
+        if(!usuario) {
+            return res.json({
+                msg: "Usuario no existente"
             })
         }
-        return res.status(200).json({
-            response: response[0]
-        });
+        
+        //Verificar si el usuario confirmo su cuenta
+        if(!usuario.confirmado){
+            return res.json({
+                msg: "Esta cuenta no esta confirmada"
+            })
+        }
+
+        //Revisar password
+        if(!usuario.verificarPassword(password)){
+            return res.json({
+                msg: "La contraseña es incorrecta"
+            })
+        }
+
+        //Autenticar usuario
+        const token = generarJWT(usuario.id_usuario);
+        console.log(token);
+
+        //Almacenar en un cookie
+        return res.cookie('_token', token, {
+            httpOnly: true,
+            //secure: true
+        }).redirect('/homepage')
+
     } catch (err) {
-        return res.status(500).json({
-            msg: "Informacion no encontrada"
+        res.status(500).json({ 
+            error: 'Ocurrió un error al intentar autenticar' 
         });
     }
 }
@@ -71,7 +107,6 @@ const registerController = async (req, res) => {
         });
 
     } catch (err) {
-        console.log(err);
         res.status(500).json({ 
             error: 'Ocurrió un error al procesar la solicitud' 
         });
@@ -112,7 +147,7 @@ const resetPassword = async (req, res) => {
                 errores: errores.array() 
             });
         }
-        const {email} = req.body;
+        const {email, nombre} = req.body;
 
         const usuario = await Usuario.findOne({where: {email}});
         if(!usuario){
@@ -121,14 +156,15 @@ const resetPassword = async (req, res) => {
             })
         }
 
-        //Generar id
+        //Generar token
         usuario.token = generateId();
         await usuario.save();
 
         //Enviar email
         emailResetPassword({
+            nombre: usuario.nombre,
             email: usuario.email,
-            token: usuario.token,
+            token: usuario.token
         });
 
     } catch (err) {
@@ -139,11 +175,64 @@ const resetPassword = async (req, res) => {
     }
 }
 
+//Funcion que comprueba un token
+const comprobarToken = async (req, res) => {
+    const {token} = req.params
+
+    //Verificar si el token es valido
+    const usuario = await Usuario.findOne({where: {token}});
+    if(!usuario) {
+        return res.status(401).json({
+            msg: 'Hubo un error al validar tu informacion'
+        })
+    }
+    //Formulario para agregar nuevo token
+    return res.status(200).json({
+        msg: 'Agregue una nueva contraseña'
+    })
+}
+
+const newPassword = async (req, res) => {
+    try {
+        //Crear nueva contraseña
+        await check('password').isLength({min: 8}).withMessage('Contraseña muy corta').run(req);
+        let errores = validationResult(req);
+        
+        if (!errores.isEmpty()) {
+            return res.status(400).json({ 
+                errores: errores.array() 
+            });
+        }
+        const {password} = req.body
+        const {token} = req.params
+
+        //Identificar usuario
+        const usuario = await Usuario.findOne({where: {token}});
+        
+       //Hashear contraseña
+        const salt = await bcrypt.genSalt(10)
+        usuario.password = await bcrypt.hash(password, salt);
+        usuario.token=null;
+
+        await usuario.save();
+
+        return res.status(200).json({
+            msg: 'Contraseña reestablecida exitosamente!'
+        })
+    } catch (error) {
+        res.status(500).json({ 
+            error: 'Ocurrió un error al procesar la solicitud' 
+        });
+    }
+    
+}
 
 
 export {
-    loginController,
+    autenticar,
     registerController,
     confirmarController,
-    resetPassword
+    resetPassword,
+    comprobarToken,
+    newPassword
 };

@@ -31,4 +31,9 @@ const Usuario = conexion.define('usuario', {
     }
 })
 
+//Metodos personalizados
+Usuario.prototype.verificarPassword = function(password){
+    return bcrypt.compareSync(password, this.password); //pssword es la constante que envio el usuario y this.password es desde la base de datos a comparar
+}
+
 export default Usuario;
