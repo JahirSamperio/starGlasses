@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Register from "./pages/Register"
 import NavBar from "./components/navBar/NavBar";
 import { Products } from "./pages/Products";
+import { Footer } from "./components/footer/Footer";
 
 
 const navArrayLinks = [
@@ -28,6 +29,7 @@ function App() {
         <Route path="/register" element= {<Register/>}/>
         <Route path="/products" element={<Products/>}/>
       </Routes>
+      <Footer/>
       
     </>
   );
