@@ -1,10 +1,12 @@
 import { Box, Card, Container, Icon, Paper, Typography } from "@mui/material";
 import LandingPaper from "../components/LandingPaper/LandingPaper";
 import ProductCard from "../components/productCard/ProductCard";
+import { Footer } from "../components/footer/Footer";
 // import {}from '../../public/img'
 
 export default function Home() {
   return (
+    <>
     <Paper
       elevation={10}
       sx={{
@@ -107,5 +109,7 @@ export default function Home() {
         ></Box>
       </Container>
     </Paper>
+
+    </>
   );
 }
