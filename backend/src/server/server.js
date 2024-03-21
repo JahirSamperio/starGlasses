@@ -4,7 +4,8 @@ import cors from 'cors';
 import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
 import conexion from '../db/conexion.js';
-
+import multer from 'multer'; // Importa multer
+import fileUpload from 'express-fileupload';
 class Server {
     constructor() {
         this.app = express();
@@ -38,9 +39,21 @@ class Server {
 
         //Habilitar cookie parser
         this.app.use(cookieParser());
+
+        // Habilitar multer para manejar archivos en formato multipart/form-data
+        //const upload = multer();
+
+        // Middleware de multer para procesar la carga de archivos
+        //this.app.use(upload.any());
         
         //Habilitar CSRF
         //this.app.use(csrf({cookie: true}));
+
+        //carga de archivos
+        this.app.use(fileUpload({
+            useTempFiles : true,
+            tempFileDir : '/tmp/'
+        })); 
     }
 
     routes() {
