@@ -21,18 +21,21 @@ const navArrayLinks = [
 
 function App() {
   return (
-    <>
-      <NavBar navArrayLinks={navArrayLinks}/>
-      <Routes>
-        <Route path="/" element = {<Home/>}/>
-        <Route path="/login" element = {<Login/>}/>
-        <Route path="/register" element= {<Register/>}/>
-        <Route path="/products-list" element={<Products/>}/>
-        <Route path="/shopping-cart" element={<ShoppingCart/>}/>
-      </Routes>
-      <Footer/>
-      
-    </>
+    
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <NavBar navArrayLinks={navArrayLinks}/>
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/products-list" element={<Products />} />
+            <Route path="/shopping-cart" element={<ShoppingCart />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
+    
   );
 }
 
