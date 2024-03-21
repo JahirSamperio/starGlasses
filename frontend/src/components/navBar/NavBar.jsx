@@ -43,7 +43,7 @@ export default function NavBar({ navArrayLinks }) {
             ))}
           </Box>
           <Box>
-            <Button>
+            <Button component={NavLink} to={'/shopping-cart'}>
               <ShoppingBagRounded color="secondary"/>
             </Button>
             <Button

@@ -5,14 +5,14 @@ import Register from "./pages/Register"
 import NavBar from "./components/navBar/NavBar";
 import { Products } from "./pages/Products";
 import { Footer } from "./components/footer/Footer";
-
+import { ShoppingCart } from "./pages/ShoppingCart";
 
 const navArrayLinks = [
   {
       title: "Inicio", path: "/", icon: null
   },
   {
-    title: "Productos", path: "/products", icon:null 
+    title: "Productos", path: "/products-list", icon:null 
   },
   {
       title: "Citas", path: "/appointment-schudlement", icon: null
@@ -27,7 +27,8 @@ function App() {
         <Route path="/" element = {<Home/>}/>
         <Route path="/login" element = {<Login/>}/>
         <Route path="/register" element= {<Register/>}/>
-        <Route path="/products" element={<Products/>}/>
+        <Route path="/products-list" element={<Products/>}/>
+        <Route path="/shopping-cart" element={<ShoppingCart/>}/>
       </Routes>
       <Footer/>
       

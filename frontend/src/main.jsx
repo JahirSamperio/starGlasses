@@ -11,6 +11,8 @@ import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 
+import { Provider } from "react-redux";
+import { store } from "./redux/store/store.jsx";
 const theme = createTheme({
   palette: {
     type: "dark",
@@ -25,13 +27,15 @@ const theme = createTheme({
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
-          <CssBaseline />
-          <AppRouter/>
-        </SnackbarProvider>
-      </BrowserRouter>
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <BrowserRouter>
+          <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
+            <CssBaseline />
+            <AppRouter />
+          </SnackbarProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
   </React.StrictMode>
 );

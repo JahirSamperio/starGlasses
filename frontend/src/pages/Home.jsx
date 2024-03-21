@@ -15,8 +15,9 @@ export default function Home() {
       }}
     >
       <Container
-        maxWidth
+        maxWidth=''
         sx={{
+          maxWidth:'auto',
           width: "auto",
           height: "368px",
           backgroundImage:
