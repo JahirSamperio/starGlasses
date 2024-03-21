@@ -1,9 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Grid, Paper, Typography } from "@mui/material";
 import ProductCard from "../components/productCard/ProductCard";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import { getProductListAction } from "../redux/actions/products/getProductList";
+
 export const Products = () => {
+  const dispatch = useDispatch();
+  const { loading, success, productListData } = useSelector(
+    (state) => state.products.get
+  );
+
+  useEffect(() => {
+    dispatch(getProductListAction());
+  }, []);
+
+
   return (
     <Paper
       elevation={10}
@@ -14,7 +28,13 @@ export const Products = () => {
       }}
     >
       <Grid>
-        <ProductCard />
+        {success === true ? (
+          productListData.map((element, index) => {
+            return <ProductCard key={index} name={element.name} precio={element.precio} id={element.id}/>;
+          })
+        ) : (
+          <></>
+        )}
       </Grid>
     </Paper>
   );
