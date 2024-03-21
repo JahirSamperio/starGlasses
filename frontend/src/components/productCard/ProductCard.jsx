@@ -10,14 +10,14 @@ import {
 
 import { useEffect, useState } from "react";
 
-export default function ProductCard({ id, name, precio }) {
+export default function ProductCard({ id, name, price }) {
   const [shoppingData, setShoppingData] = useState();
 
   useEffect(() => {
     setShoppingData(JSON.parse(localStorage.getItem("shopping_cart")) || []);
   }, []);
 
-  const handleProductsToShoppingCart = (id, name, precio) => {
+  const handleProductsToShoppingCart = (id, name, price) => {
     // Obtenemos desde el almacenamiento local
     const currentShoppingData = JSON.parse(localStorage.getItem('shopping_cart')) || [];
   
@@ -34,7 +34,7 @@ export default function ProductCard({ id, name, precio }) {
     const newItem = {
       id,
       name,
-      precio,
+      price,
     };
   
     // Creamos una nueva copia del carrito por medio de desestructuracion  y agregamos el nuevo artícul
@@ -71,7 +71,7 @@ export default function ProductCard({ id, name, precio }) {
           <Typography component="p" variant="body2">
             {name}
           </Typography>
-          <Typography sx={{ mt: "5px" }}>${precio}</Typography>
+          <Typography sx={{ mt: "5px" }}>${price}</Typography>
         </CardContent>
       </CardActionArea>
 
@@ -81,7 +81,7 @@ export default function ProductCard({ id, name, precio }) {
           sx={{ fontSize: "12px", flexGrow: 1 }}
           onClick={(e) => {
             e.preventDefault();
-            handleProductsToShoppingCart(id, name, precio);
+            handleProductsToShoppingCart(id, name, price);
           }}
         >
           Add
