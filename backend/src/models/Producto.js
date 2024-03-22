@@ -52,7 +52,11 @@ const Producto = conexion.define('producto_lentes', {
     imagen: {
         type: DataTypes.STRING,  // Puedes ajustar el tipo de dato según cómo guardes las imágenes en tu aplicación
         allowNull: false
+    },id_precio: {
+        type: DataTypes.INTEGER,
     }
 })
 
-export default Producto;
+
+
+export default Producto
