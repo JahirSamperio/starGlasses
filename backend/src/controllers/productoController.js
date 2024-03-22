@@ -2,6 +2,8 @@ import {Producto, Precio} from '../models/asosiations.js';
 import { check, validationResult } from 'express-validator';
 import {v2 as cloudinary} from 'cloudinary'
 import 'dotenv/config'
+import {Sequelize} from 'sequelize'
+
 
 import uploadCloudinary from '../uploads/uploads.js';
 
@@ -230,11 +232,36 @@ const allProducts = async (req, res) => {
     }
 }
 
+const allOffers = async (req, res) => {
+    try {
+        const ofertas = await Producto.findAll({
+            include:{
+                model: Precio,
+                where: {
+                    estado:{
+                        [Sequelize.Op.or]: ["activa", "Activa"]
+                    }
+                } 
+            }
+        });
+
+        return res.status(200).json({
+            ofertas
+        })
+    } catch (error) {
+        return res.status(500).json({
+            msg: "Error en el servidor",
+            error
+        });
+    }
+}
+
 export {
     newProduct,
     agregarOferta,
     eliminarProducto,
     modificarProducto,
     perfilProducto,
-    allProducts
+    allProducts,
+    allOffers
 }
