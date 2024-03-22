@@ -10,7 +10,11 @@ import {
 } from "@mui/material";
 import React from "react";
 
-export default function ShoppingCartItem({id,name, price}) {
+
+export default function ShoppingCartItem({id,name, price, handleRemoveFromCart}) {
+
+
+
   return (
     <Card
       sx={{
@@ -35,7 +39,7 @@ export default function ShoppingCartItem({id,name, price}) {
 
       <CardActions>
         <Button  sx={{mr:'16px'}}>ver</Button>
-        <Button variant="contained" color="error" sx={{mr:'16px'}}>Eliminar</Button>
+        <Button variant="contained" color="error" sx={{mr:'16px'}} onClick={() => handleRemoveFromCart(id)}>Eliminar</Button>
       </CardActions>
     </Card>
   );
