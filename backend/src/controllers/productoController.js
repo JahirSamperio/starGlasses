@@ -68,7 +68,8 @@ const newProduct =  async (req = request, res = response) => {
 
     } catch (err) {
         return res.status(500).json({
-            msg: "Error en el servidor"
+            msg: "Error en el servidor",
+            err
         })
     }
 }
@@ -208,7 +209,16 @@ const perfilProducto = async (req, res) => {
     try {
         const { id_lentes } = req.params;
 
-        const producto = await Producto.findOne({where: { id_lentes }});
+        const producto = await Producto.findOne({
+            where: { id_lentes },
+            include:{
+                model: Precio,
+                attributes: [
+                    'precio_venta',
+                    'oferta',
+                    'fecha_fin_oferta'
+                ]
+                }});
         return res.status(200).json({
             producto
         })
@@ -221,7 +231,16 @@ const perfilProducto = async (req, res) => {
 
 const allProducts = async (req, res) => {
     try {
-        const productos = await Producto.findAll();
+        const productos = await Producto.findAll({
+            include:{
+                model: Precio,
+                attributes: [
+                    'precio_venta',
+                    'oferta',
+                    'fecha_fin_oferta'
+                ]
+                }
+        });
         return res.status(200).json({
             productos
         })
@@ -256,6 +275,61 @@ const allOffers = async (req, res) => {
     }
 }
 
+const getStock = async (req, res) => {
+    try {
+        const allStock = await Producto.findAll({
+            attributes:[
+                'nombre',
+                'marca',
+                'existencia',
+                'updatedAt'
+            ]
+        })
+        return res.status(200).json({
+            allStock
+        })
+    } catch (error) {
+        return res.status(500).json({ 
+            error: 'Ocurrió un error al procesar la solicitud' 
+        });
+    }
+}
+
+const descStock = async (req, res) => {
+    try {
+        const descStock = await Producto.findAll({
+            order: [
+                ['existencia', 'ASC']
+            ]
+        })
+        return res.status(200).json({
+            descStock
+        })
+    } catch (err) {
+        return res.status(500).json({
+            error: 'Error en el servidor',
+            err
+        })
+    }
+}
+
+const ascStock = async (req, res) => {
+    try {
+        const ascStock = await Producto.findAll({
+            order: [
+                ['existencia', 'DESC']
+            ], 
+            limit: 10 // Limita a 10 resultados
+        })
+        return res.status(200).json({
+            ascStock
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: 'Error en el servidor'
+        })
+    }
+}
 export {
     newProduct,
     agregarOferta,
@@ -263,5 +337,8 @@ export {
     modificarProducto,
     perfilProducto,
     allProducts,
-    allOffers
+    allOffers,
+    getStock,
+    descStock,
+    ascStock
 }
