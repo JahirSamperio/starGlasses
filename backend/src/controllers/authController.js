@@ -25,28 +25,27 @@ const autenticar = async (req = request, res = response) => {
         //Verificar si el usuario existe
         const usuario = await Usuario.findOne({where: { email }});
         if(!usuario) {
-            return res.json({
+            return res.status(404).json({
                 msg: "Usuario no existente"
             })
         }
         
         //Verificar si el usuario confirmo su cuenta
         if(!usuario.confirmado){
-            return res.json({
+            return res.status(404).json({
                 msg: "Esta cuenta no esta confirmada"
             })
         }
 
         //Revisar password
         if(!usuario.verificarPassword(password)){
-            return res.json({
+            return res.status(401).json({
                 msg: "La contraseña es incorrecta"
             })
         }
 
         //Autenticar usuario
         const token = generarJWT(usuario.id_usuario);
-        console.log(token);
 
         //Almacenar en un cookie
         return res.cookie('_token', token, {
@@ -83,7 +82,7 @@ const registerController = async (req, res) => {
         //Verificar que no haya duplicados
         const existeUsuario = await Usuario.findOne({where: { email }});
         if(existeUsuario) {
-            return res.json({
+            return res.status(409).json({
                 msg: "Este usuario ya existe"
             })
         }
@@ -226,6 +225,8 @@ const newPassword = async (req, res) => {
     }
     
 }
+
+
 
 
 export {
