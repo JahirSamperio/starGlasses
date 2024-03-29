@@ -5,8 +5,6 @@ const router = Router();
 
 router.post('/login', autenticar);
 
-
-
 router.post('/registro', registerController);
 
 router.get('/confirmar/:token', confirmarController);

@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from '../routes/routes.js';
+import payments from '../routes/payments.js';
 import cors from 'cors';
 import csrf from 'csurf';
 import cookieParser from 'cookie-parser';
@@ -34,6 +35,8 @@ class Server {
         //CORS
         this.app.use(cors());
 
+
+
         //Lectura y parseo del body
         this.app.use(express.json());
 
@@ -58,6 +61,7 @@ class Server {
 
     routes() {
         this.app.use(routes);
+        // this.app.use(payments);
     }
 
     listen() {

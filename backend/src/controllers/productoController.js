@@ -300,7 +300,8 @@ const descStock = async (req, res) => {
         const descStock = await Producto.findAll({
             order: [
                 ['existencia', 'ASC']
-            ]
+            ],
+            limit: 10 // Limita a 10 resultados
         })
         return res.status(200).json({
             descStock
