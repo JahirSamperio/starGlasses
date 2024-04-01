@@ -38,7 +38,7 @@ class Server {
 
 
         //Lectura y parseo del body
-        this.app.use(express.json());
+        // this.app.use(express.json());
 
         //Habilitar cookie parser
         this.app.use(cookieParser());
@@ -60,8 +60,8 @@ class Server {
     }
 
     routes() {
+        this.app.use('/stripe', payments);
         this.app.use(routes);
-        // this.app.use(payments);
     }
 
     listen() {

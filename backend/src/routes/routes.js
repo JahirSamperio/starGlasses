@@ -5,10 +5,12 @@ import paymentsRouter from './payments.js'; // Importa paymentsRouter desde auth
 
 const app = express();
 
+app.use(express.json());
+
 app.use('/login', loginRouter);
 
 app.use('/producto', productRouter);
 
-app.use('/stripe', paymentsRouter);
+// app.use('/stripe', paymentsRouter);
 
 export default app;
