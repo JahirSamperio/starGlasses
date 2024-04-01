@@ -6,6 +6,7 @@ import NavBar from "./components/navBar/NavBar";
 import { Products } from "./pages/Products";
 import { Footer } from "./components/footer/Footer";
 import { ShoppingCart } from "./pages/ShoppingCart";
+import { Recomendations } from "./pages/Recomendations";
 
 const navArrayLinks = [
   {
@@ -15,7 +16,7 @@ const navArrayLinks = [
     title: "Productos", path: "/products-list", icon:null 
   },
   {
-      title: "Citas", path: "/appointment-schudlement", icon: null
+      title: "Recomendaciones", path: "/recomendations", icon: null
   }
 ]
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/products-list" element={<Products />} />
             <Route path="/shopping-cart" element={<ShoppingCart />} />
+            <Route path="/recomendations" element={<Recomendations/>}/>
           </Routes>
         </div>
         <Footer />

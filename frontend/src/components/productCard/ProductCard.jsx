@@ -1,14 +1,18 @@
 import {
+  Alert,
   Button,
   Card,
   CardActionArea,
   CardActions,
   CardContent,
   CardMedia,
+  Collapse,
   Typography,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
+
 
 export default function ProductCard({ id, name, price }) {
   const [shoppingData, setShoppingData] = useState();
@@ -17,35 +21,41 @@ export default function ProductCard({ id, name, price }) {
     setShoppingData(JSON.parse(localStorage.getItem("shopping_cart")) || []);
   }, []);
 
+  const {enqueueSnackbar} = useSnackbar();
+
   const handleProductsToShoppingCart = (id, name, price) => {
-    // Obtenemos desde el almacenamiento local
+    // bring the current products in the shopping cart 
     const currentShoppingData = JSON.parse(localStorage.getItem('shopping_cart')) || [];
   
-    // Verificamos si el producto ya está en el carrito usando el item.id y comparando con los que estan 
-    // en el carro (shoppingData[])
+    // Verify if certain product is in the shoppingCart comparing item.id
     const isProductInCart = currentShoppingData.some(item => item.id === id);
   
-    // Si el es el caso, no se realiza ninguna operacion
+    // on that case, the operation is not executed
     if (isProductInCart) {
       return;
     }
   
-    // Crear un nuevo objeto para el nuevo artículo
+    // create an object for the new shoppingCart item 
     const newItem = {
       id,
       name,
       price,
     };
   
-    // Creamos una nueva copia del carrito por medio de desestructuracion  y agregamos el nuevo artícul
+    // a new copy of the array using destructuaration and make the 
+    //insertion of the newItem
     
     const newShoppingData = [...currentShoppingData, newItem];
   
-    // Actualizamos el estado con el nuevo carrito de compras
+    // update shoppingData state
     setShoppingData(newShoppingData);
   
-    // Guardar el nuevo carrito de compras en el almacenamiento local
+    // set new shopping cart on localStorage
     localStorage.setItem('shopping_cart', JSON.stringify(newShoppingData));
+
+    enqueueSnackbar('Producto agregado al carrito', {
+      variant:'success'
+    })
   };
   
 
@@ -81,7 +91,7 @@ export default function ProductCard({ id, name, price }) {
           sx={{ fontSize: "12px", flexGrow: 1 }}
           onClick={(e) => {
             e.preventDefault();
-            handleProductsToShoppingCart(id, name, price);
+            handleProductsToShoppingCart(id, name, price)
           }}
         >
           Add
