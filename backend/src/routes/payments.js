@@ -5,8 +5,9 @@ import {createCheckout, eventController} from "../controllers/paymentsController
 
 const router = Router();
 
+
 router.post('/create-checkout-session', createCheckout);
 
-router.post('/webhook', bodyParser.raw({ type: 'application/json' }), eventController );
+router.post('/webhook', express.raw({ type: 'application/json' }), eventController );
 
 export default router;  
