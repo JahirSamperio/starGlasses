@@ -30,7 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <BrowserRouter>
-          <SnackbarProvider maxSnack={3} autoHideDuration={5000}>
+          <SnackbarProvider maxSnack={3} autoHideDuration={2000}>
             <CssBaseline />
             <AppRouter />
           </SnackbarProvider>

@@ -15,8 +15,8 @@ export const Products = () => {
   }, []);
 
   return (
-    <Paper elevation={10} sx={{ padding: "20px", margin: "12px 16px" }}>
-      <Grid container spacing={2}>
+    <Paper elevation={10} sx={{ padding: "20px", margin: "12px 16px"}}>
+      <Grid container spacing={2} sx={{justifyContent:'center'}}>
         {success === true &&
           productListData.slice(0, 8).map((element, index) => (
             <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
