@@ -10,13 +10,51 @@ import {
   FormControlLabel,
   Link,
 } from "@mui/material";
+import { CheckBox } from "@mui/icons-material";
 
-import { CheckBox} from "@mui/icons-material";
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
-
 import { NavLink } from "react-router-dom";
 
+import {useDispatch, useSelector} from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import { useEffect } from "react";
+
+
+import {loginUser} from '../redux/actions/users/loginUser'
+
+
 export default function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+  // const {loading, success, error, loginData} = useSelector((state => state.users.login));
+
+  // const {nombre, apellidoPaterno,apellidoMaterno,password,id,telefono,email} = loginData ;
+
+  // useEffect(()=>{
+  //   console.log(loginData);
+  // },[loginData]);
+
+  // const handleUserLogin = (data)=>{
+  //   console.log(data);
+  //   const loginFormData = {
+  //     email: data.target.email.value,
+  //     password: data.target.password.value
+  //   }
+  //   dispatch(loginUser(loginFormData));
+  // }
+
+
+  // useEffect(()=>{
+  //   if(success == true){
+      
+  //   }
+  // },[success,loginData])
+
+
+
+
   return (
     <Grid>
       <Paper
@@ -61,8 +99,7 @@ export default function Login() {
           required
         /> 
         {/*checked={state.checkedB} onChange={handleChange}*/}
-        <FormControlLabel  control = {<CheckBox name='checkedB' color="primary"/> } sx={{paddingLeft:3,mt:1}} label="Recuerdáme"/>
-        <Button type="submit" variant="outlined" sx={{ margin:"12px 0"}} fullWidth>
+        <FormControlLabel control={<CheckBox name='checkedB' color="primary"/>} sx={{paddingLeft:3,mt:1}} label="Recuerdáme"/>        <Button type="submit" variant="outlined" sx={{ margin:"12px 0"}} fullWidth>
           Iniciar sesión
         </Button>
         <Typography><Link>Reestablecer contraseña.</Link></Typography>

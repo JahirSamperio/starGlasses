@@ -12,7 +12,6 @@ import {
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
-import {yupResolver} from 'react-hook-form'
 import * as yup from "yup";
 import { newUserSchema } from "../../validations/newUser";
 import {yupResolver} from '@hookform/resolvers/yup';

@@ -10,7 +10,7 @@ export const newUserSchema = yup.object().shape({
     .string()
     .matches(/^\d{3}-\d{3}-\d{4}$/, "El formato del teléfono no es válido")
     .required(requiredFieldMessage),
-  email: yup.string
+  email: yup.string()
     .email("Correo electronico invalido")
     .required(requiredFieldMessage),
   password: yup.string().required(requiredFieldMessage),
