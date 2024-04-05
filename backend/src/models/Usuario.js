@@ -4,9 +4,9 @@ import conexion from '../db/conexion.js'
 
 const Usuario = conexion.define('usuario', {
     id_usuario: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true
+        allowNull: false
     },
     nombre: {
         type: DataTypes.STRING,
@@ -21,7 +21,8 @@ const Usuario = conexion.define('usuario', {
         allowNull: false
     },
     token: DataTypes.STRING,
-    confirmado: DataTypes.BOOLEAN
+    confirmado: DataTypes.BOOLEAN,
+    id_customer_stripe: DataTypes.STRING
 }, {
     hooks: {
         beforeCreate: async function(usuario){

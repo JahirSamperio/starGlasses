@@ -3,6 +3,8 @@ import { check, validationResult } from 'express-validator';
 import {v2 as cloudinary} from 'cloudinary'
 import 'dotenv/config'
 import {Sequelize} from 'sequelize'
+import stripe from 'stripe';
+const stripeCliente = stripe(process.env.STRIPE_SECRET_KEY);
 
 
 import uploadCloudinary from '../uploads/uploads.js';
@@ -37,18 +39,34 @@ const newProduct =  async (req = request, res = response) => {
         //Extraer datos
         const {nombre, tipo, marca, material, color, graduacion, tamano, existencia, proveedor, descripcion, precio, precio_compra} = req.body;
         
-        //Creando el precio del producto en la tabla producto_precio_lentes
-        const precio_producto = await Precio.create({
-            precio_venta: precio,
-            precio_compra
-        })
-  
         
         //Cargar imagen a cloudinary y extraer url
         const secure_url = await uploadCloudinary(req);
         req.body.imagen = secure_url;
-            
+        
+        //Creando el producto y precio en Stripe
+        const product = await stripeCliente.products.create({
+            name: nombre,
+            description: descripcion,
+            images: [secure_url]
+        });
+
+        //Creando el producto y precio en Stripe
+        const price = await stripeCliente.prices.create({
+            product: product.id,
+            unit_amount: precio,
+            currency: 'mxn',
+        });
+        
+        //Creando el precio del producto en la tabla producto_precio_lentes
+        const precio_producto = await Precio.create({
+            id_precio: price.id,
+            precio_venta: precio,
+            precio_compra
+        })
+        //Creando el producto en nuestra BD
         const producto = await Producto.create({
+            id_lentes: product.id,
             nombre,
             tipo,
             marca,
@@ -60,16 +78,16 @@ const newProduct =  async (req = request, res = response) => {
             proveedor,
             descripcion,
             imagen: req.body.imagen,
-            id_precio:  precio_producto.id_precio
+            id_precio: price.id
         });
         return res.status(200).json({
             msg: "Producto guardado correctamente"
         })
 
     } catch (err) {
+        console.log(err);
         return res.status(500).json({
             msg: "Error en el servidor",
-            err
         })
     }
 }
