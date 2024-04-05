@@ -5,8 +5,7 @@ const Precio = conexion.define('producto_lentes_precio', {
     id_precio: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        primaryKey: true,
-        autoIncrement: true
+        primaryKey: true
     },
     precio_compra: DataTypes.DECIMAL,
     precio_venta: {

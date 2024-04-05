@@ -5,9 +5,9 @@ import conexion from '../db/conexion.js'
 
 const Producto = conexion.define('producto_lentes', {
     id_lentes: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         primaryKey: true,
-        autoIncrement: true
+        allowNull: false
     },
     nombre: {
         type: DataTypes.STRING,

@@ -3,7 +3,8 @@ import { check, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
 import { generateId, generarJWT } from "../helpers/tokens.js";
 import { emailRegistro, emailResetPassword } from "../helpers/emails.js";
-
+import stripe from 'stripe';
+const stripeCliente = stripe(process.env.STRIPE_SECRET_KEY);
 
 //Autenticacion del usuario
 const autenticar = async (req = request, res = response) => {
@@ -12,33 +13,33 @@ const autenticar = async (req = request, res = response) => {
         await check('email').isEmail().withMessage('Correo no valido').run(req);
         await check('password').notEmpty().withMessage('Contraseña obligatoria').run(req);
         let errores = validationResult(req);
-        
+
         if (!errores.isEmpty()) {
-            return res.status(400).json({ 
-                errores: errores.array() 
+            return res.status(400).json({
+                errores: errores.array()
             });
         }
 
         //Extraer datos
-        const {email, password} = req.body;
+        const { email, password } = req.body;
 
         //Verificar si el usuario existe
-        const usuario = await Usuario.findOne({where: { email }});
-        if(!usuario) {
+        const usuario = await Usuario.findOne({ where: { email } });
+        if (!usuario) {
             return res.status(404).json({
                 msg: "Usuario no existente"
             })
         }
-        
+
         //Verificar si el usuario confirmo su cuenta
-        if(!usuario.confirmado){
+        if (!usuario.confirmado) {
             return res.status(404).json({
                 msg: "Esta cuenta no esta confirmada"
             })
         }
 
         //Revisar password
-        if(!usuario.verificarPassword(password)){
+        if (!usuario.verificarPassword(password)) {
             return res.status(401).json({
                 msg: "La contraseña es incorrecta"
             })
@@ -54,8 +55,8 @@ const autenticar = async (req = request, res = response) => {
         }).redirect('/homepage')
 
     } catch (err) {
-        res.status(500).json({ 
-            error: 'Ocurrió un error al intentar autenticar' 
+        res.status(500).json({
+            error: 'Ocurrió un error al intentar autenticar'
         });
     }
 }
@@ -63,37 +64,46 @@ const autenticar = async (req = request, res = response) => {
 //Registro de usuario
 const registerController = async (req, res) => {
     try {
-         //Validacion
+        //Validacion
         await check('nombre').notEmpty().withMessage('El nombre no puede ir vacio').run(req);
         await check('email').isEmail().withMessage('Correo no valido').run(req);
-        await check('password').isLength({min: 8}).withMessage('Contraseña muy corta').run(req);
+        await check('password').isLength({ min: 8 }).withMessage('Contraseña muy corta').run(req);
 
         let errores = validationResult(req);
-        
+
         if (!errores.isEmpty()) {
-            return res.status(400).json({ 
-                errores: errores.array() 
+            return res.status(400).json({
+                errores: errores.array()
             });
         }
 
         //extraer los datos
-        const {nombre, email, password} = req.body;
+        const { nombre, email, password } = req.body;
 
         //Verificar que no haya duplicados
-        const existeUsuario = await Usuario.findOne({where: { email }});
-        if(existeUsuario) {
+        const existeUsuario = await Usuario.findOne({ where: { email } });
+        if (existeUsuario) {
             return res.status(409).json({
                 msg: "Este usuario ya existe"
             })
         }
 
+        //CREAR EL USUARIO CUANDO ENCUENTRE EL TOKEN Y SEA VALIDO, TOMA LOS DATOS CON EL TOKEN
+        const usuarioStripe = await stripeCliente.customers.create({
+            email: email,
+            name: nombre
+        });
+
+        
+        //Guarda el id del customer para hacer el checkout
         const usuario = await Usuario.create({
-            nombre, 
-            email, 
+            id_usuario: usuarioStripe.id,
+            nombre,
+            email,
             password,
             token: generateId()
         });
-        
+
         res.json({
             msg: "Hemos enviado un correo de confirmacion, confirme su cuenta"
         });
@@ -106,28 +116,29 @@ const registerController = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({ 
-            error: 'Ocurrió un error al procesar la solicitud' 
+        res.status(500).json({
+            error: 'Ocurrió un error al procesar la solicitud'
         });
     }
 }
 
 //Funcion que comprueba una cuenta
 const confirmarController = async (req, res) => {
-    const {token} = req.params
+    const { token } = req.params
 
     //Verificar si el token es valido
-    const usuario = await Usuario.findOne({where: {token}});
-    if(!usuario) {
+    const usuario = await Usuario.findOne({ where: { token } });
+    if (!usuario) {
         return res.status(401).json({
             msg: 'Token no válido'
         })
     }
 
-    //Confirmar cuenta
-    usuario.token=null;
-    usuario.confirmado=true;
+
+    usuario.token = null;
+    usuario.confirmado = true;
     await usuario.save(); //Guarda los datos modificados anteriormente
+
     return res.status(200).json({
         msg: 'Cuenta confirmada. Ya puedes iniciar sesion'
     })
@@ -135,21 +146,21 @@ const confirmarController = async (req, res) => {
 
 const resetPassword = async (req, res) => {
     try {
-         //Validacion
+        //Validacion
         await check('email').isEmail().withMessage('Correo no valido').run(req);
 
         let errores = validationResult(req);
-        
+
         if (!errores.isEmpty()) {
             //Errores
-            return res.status(400).json({ 
-                errores: errores.array() 
+            return res.status(400).json({
+                errores: errores.array()
             });
         }
-        const {email, nombre} = req.body;
+        const { email, nombre } = req.body;
 
-        const usuario = await Usuario.findOne({where: {email}});
-        if(!usuario){
+        const usuario = await Usuario.findOne({ where: { email } });
+        if (!usuario) {
             return res.status(401).json({
                 msg: "Este email no pertenece a ningun usuario"
             })
@@ -168,19 +179,19 @@ const resetPassword = async (req, res) => {
 
     } catch (err) {
         console.log(err);
-        res.status(500).json({ 
-            error: 'Ocurrió un error al procesar la solicitud' 
+        res.status(500).json({
+            error: 'Ocurrió un error al procesar la solicitud'
         });
     }
 }
 
 //Funcion que comprueba un token
 const comprobarToken = async (req, res) => {
-    const {token} = req.params
+    const { token } = req.params
 
     //Verificar si el token es valido
-    const usuario = await Usuario.findOne({where: {token}});
-    if(!usuario) {
+    const usuario = await Usuario.findOne({ where: { token } });
+    if (!usuario) {
         return res.status(401).json({
             msg: 'Hubo un error al validar tu informacion'
         })
@@ -194,24 +205,24 @@ const comprobarToken = async (req, res) => {
 const newPassword = async (req, res) => {
     try {
         //Crear nueva contraseña
-        await check('password').isLength({min: 8}).withMessage('Contraseña muy corta').run(req);
+        await check('password').isLength({ min: 8 }).withMessage('Contraseña muy corta').run(req);
         let errores = validationResult(req);
-        
+
         if (!errores.isEmpty()) {
-            return res.status(400).json({ 
-                errores: errores.array() 
+            return res.status(400).json({
+                errores: errores.array()
             });
         }
-        const {password} = req.body
-        const {token} = req.params
+        const { password } = req.body
+        const { token } = req.params
 
         //Identificar usuario
-        const usuario = await Usuario.findOne({where: {token}});
-        
-       //Hashear contraseña
+        const usuario = await Usuario.findOne({ where: { token } });
+
+        //Hashear contraseña
         const salt = await bcrypt.genSalt(10)
         usuario.password = await bcrypt.hash(password, salt);
-        usuario.token=null;
+        usuario.token = null;
 
         await usuario.save();
 
@@ -219,11 +230,11 @@ const newPassword = async (req, res) => {
             msg: 'Contraseña reestablecida exitosamente!'
         })
     } catch (error) {
-        res.status(500).json({ 
-            error: 'Ocurrió un error al procesar la solicitud' 
+        res.status(500).json({
+            error: 'Ocurrió un error al procesar la solicitud'
         });
     }
-    
+
 }
 
 
