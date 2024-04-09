@@ -7,6 +7,7 @@ import { Products } from "./pages/Products";
 import { Footer } from "./components/footer/Footer";
 import { ShoppingCart } from "./pages/ShoppingCart";
 import { Recomendations } from "./pages/Recomendations";
+import { ProductView } from "./pages/ProductView";
 
 const navArrayLinks = [
   {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/products-list" element={<Products />} />
             <Route path="/shopping-cart" element={<ShoppingCart />} />
             <Route path="/recomendations" element={<Recomendations/>}/>
+            <Route path="/product/:id" element={<ProductView/>}/>
           </Routes>
         </div>
         <Footer />

@@ -5,7 +5,7 @@ import { Inbox, Drafts } from "@mui/icons-material";
 export default function NavListDrawer({navArrayLinks, NavLink, setOpen}) {
     return (
 
-        <Box sx={{ width: 250, bgcolor:"#FF00FF" }}>
+        <Box sx={{ width: 250,  }}>
             
             <nav>
                 <List>
