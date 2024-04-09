@@ -69,7 +69,7 @@ export default function ProductCard({ id, name, price }) {
         width: { lg: 250, sm: 220, xs: 300 },
       }}
     >
-      <CardActionArea>
+      <CardActionArea onClick={()=>{}}>
         <CardMedia
           component="img"
           image="https://via.placeholder.com/200"

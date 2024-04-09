@@ -10,7 +10,8 @@ import {
 import NavListDrawer from "./NavListDrawer";
 import { useState } from "react";
 
-import { Menu, ShoppingBagRounded } from "@mui/icons-material";
+
+import { Menu, ShoppingBagRounded, AccountCircle } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 
 export default function NavBar({ navArrayLinks }) {
@@ -54,6 +55,9 @@ export default function NavBar({ navArrayLinks }) {
             >
               Iniciar sesión
             </Button> 
+            <IconButton color="secondary">
+              <AccountCircle/>
+            </IconButton>
           </Box>
         </Toolbar>
       </AppBar>

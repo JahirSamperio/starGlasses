@@ -15,12 +15,21 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store/store.jsx";
 const theme = createTheme({
   palette: {
-    type: "dark",
+    mode: 'light',
     primary: {
-      main: "#3f51b5",
+      main: '#2e6758',
     },
     secondary: {
-      main: "#f50057",
+      main: '#70a090',
+      light: '#6d966d',
+    },
+    background: {
+      default: '#eaebed',
+      paper: '#ecece6',
+    },
+    text: {
+      primary: 'rgba(1, 50, 55, 1)',
+      secondary: 'rgba(1, 50, 55, 1)',
     },
   },
 });

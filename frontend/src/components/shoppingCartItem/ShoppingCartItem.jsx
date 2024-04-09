@@ -23,7 +23,7 @@ export default function ShoppingCartItem({id,name, price, handleRemoveFromCart})
         mb:'12px'
       }}
     >
-      <CardActionArea sx={{ display: "flex  " }}>
+      <CardActionArea sx={{ display: "flex  " }}> 
         <CardMedia
           component="img"
           image="https://via.placeholder.com/150x150"
