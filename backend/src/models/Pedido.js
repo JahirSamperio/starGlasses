@@ -3,7 +3,7 @@ import conexion from '../db/conexion.js'
 
 
 const Pedido = conexion.define('pedido', {
-    id_lentes: {
+    id_pedido: {
         type: DataTypes.STRING,
         primaryKey: true,
         allowNull: false
@@ -19,5 +19,8 @@ const Pedido = conexion.define('pedido', {
     estado: {
         type: DataTypes.STRING,
         allowNull: false
-    }
+    },
+    metodo_pago: DataTypes.STRING
 })
+
+export default Pedido
