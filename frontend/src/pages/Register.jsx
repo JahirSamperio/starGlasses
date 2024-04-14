@@ -20,9 +20,9 @@ import {yupResolver} from '@hookform/resolvers/yup';
 
 export default function Register() {
   
-  const {register, handleSubmit, formState:{errors}} = useForm({
-    resolver: yupResolver(newUserSchema),
-  });
+  // const {register, handleSubmit, formState:{errors}} = useForm({
+  //   resolver: yupResolver(newUserSchema),
+  // });
 
   const onsubmit = (data) => {
 
@@ -42,7 +42,7 @@ export default function Register() {
           margin: "40px auto",
           borderRadius: "12px",
         }}
-        onSubmit={handleSubmit(onsubmit)}
+        // onSubmit={handleSubmit(onsubmit)}
       >
         <Grid align="center">
           <Typography variant="h4" component="h4">
@@ -53,18 +53,18 @@ export default function Register() {
           </Avatar>
         </Grid>
         <TextField
-        {...register("nombre")}
+     //   {...register("nombre")}
           sx={{ mt: 2 }}
           id="nombre"
           label="Nombre"
           variant="outlined"
           required
           fullWidth
-          helperText={errors.nombre ? errors.nombre.message : null}
+         // helperText={errors.nombre ? errors.nombre.message : null}
         />
         <Box sx={{ mt: 2, display: { sm: "flex", xs: "block" } }}>
           <TextField
-            {...register("apellidoPaterno")}
+          //  {...register("apellidoPaterno")}
             sx={{
               width: { xs: "100%", sm: "auto" }, // Usar fullWidth solo en xs
               mr: { sm: 1, xs: 0 },
@@ -74,10 +74,10 @@ export default function Register() {
             label="Apellido Paterno"
             variant="outlined"
             required
-            helperText= {errors.apellidoPaterno ? errors.apellidoPaterno.message : null}
+          //  helperText= {errors.apellidoPaterno ? errors.apellidoPaterno.message : null}
           />
           <TextField
-            {...register("apellidoMaterno")}
+          //  {...register("apellidoMaterno")}
             sx={{
               width: { xs: "100%", sm: "auto" }, // Usar fullWidth solo en xs
               ml: { sm: 1, xs: 0 },
@@ -86,7 +86,7 @@ export default function Register() {
             id="apellidoMaterno"
             label="Apellido materno"
             variant="outlined"
-            helperText={errors.apellidoMaterno ? errors.apellidoMaterno.message : null}
+          //  helperText={errors.apellidoMaterno ? errors.apellidoMaterno.message : null}
           />
         </Box>
         {/* <DatePicker
@@ -99,17 +99,17 @@ export default function Register() {
                 required
             /> */}
         <TextField
-          {...register("telefono")}
+       //   {...register("telefono")}
           sx={{ mt: 2 }}
           type="number"
           id="phoneNumber"
           label="Número telefónico"
           variant="outlined"
           fullWidth
-          helperText={errors.telefono ? errors.telefono.message : "Formato: xxx-xxx-xxxx"}
+          //helperText={errors.telefono ? errors.telefono.message : "Formato: xxx-xxx-xxxx"}
         />
         <TextField
-          {...register("email")}
+        //  {...register("email")}
           sx={{ mt: 2 }}
           id="email"
           label="E-mail"
@@ -117,14 +117,14 @@ export default function Register() {
           type="email"
           fullWidth
           required
-          helperText={errors.email ? errors.email.message : null}
+        //  helperText={errors.email ? errors.email.message : null}
           // error={error.error}
           // onChange={(e) => setEmail(e.target.value)}
           // value={email}
         />
         <Box sx={{ mt: 2, display: { sm: "flex", xs: "block" } }}>
           <TextField
-            {...register("password")}
+          //  {...register("password")}
             sx={{
               width: { xs: "100%", sm: "auto" }, // Usar fullWidth solo en xs
               mr: { sm: 1, xs: 0 }, // Espacio entre los TextField solo para sm
@@ -134,10 +134,10 @@ export default function Register() {
             label="Contraseña"
             variant="outlined"
             required
-            helperText={errors.password ? errors.password.message : null}
+          //  helperText={errors.password ? errors.password.message : null}
           />
           <TextField
-            {...register("passwordConfirmation")}
+         //   {...register("passwordConfirmation")}
             sx={{
               width: { xs: "100%", sm: "auto" }, // Usar fullWidth solo en xs
               ml: { sm: 1, xs: 0 }, // Espacio entre los TextField solo para sm
@@ -147,7 +147,7 @@ export default function Register() {
             label="Confirmar Contraseña"
             variant="outlined"
             required
-            helperText={errors.passwordConfirmation ? error.passwordConfirmation.message : null }
+           // helperText={errors.passwordConfirmation ? error.passwordConfirmation.message : null }
           />
         </Box>
         {/*checked={state.checkedB} onChange={handleChange}*/}
