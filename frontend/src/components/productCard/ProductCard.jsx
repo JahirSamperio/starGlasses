@@ -13,51 +13,55 @@ import {
 import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 
+export default function ProductCard({ product, onProductClick }) {
 
-export default function ProductCard({ id, name, price }) {
-  const [shoppingData, setShoppingData] = useState();
+  const {name, imageUrl, description, id, price} = product || {};
 
-  useEffect(() => {
-    setShoppingData(JSON.parse(localStorage.getItem("shopping_cart")) || []);
-  }, []);
 
-  const {enqueueSnackbar} = useSnackbar();
+  // props for shoppingCart = id, name, price
+  // const [shoppingData, setShoppingData] = useState();
 
-  const handleProductsToShoppingCart = (id, name, price) => {
-    // bring the current products in the shopping cart 
-    const currentShoppingData = JSON.parse(localStorage.getItem('shopping_cart')) || [];
-  
-    // Verify if certain product is in the shoppingCart comparing item.id
-    const isProductInCart = currentShoppingData.some(item => item.id === id);
-  
-    // on that case, the operation is not executed
-    if (isProductInCart) {
-      return;
-    }
-  
-    // create an object for the new shoppingCart item 
-    const newItem = {
-      id,
-      name,
-      price,
-    };
-  
-    // a new copy of the array using destructuaration and make the 
-    //insertion of the newItem
-    
-    const newShoppingData = [...currentShoppingData, newItem];
-  
-    // update shoppingData state
-    setShoppingData(newShoppingData);
-  
-    // set new shopping cart on localStorage
-    localStorage.setItem('shopping_cart', JSON.stringify(newShoppingData));
+  // useEffect(() => {
+  //   setShoppingData(JSON.parse(localStorage.getItem("shopping_cart")) || []);
+  // }, []);
 
-    enqueueSnackbar('Producto agregado al carrito', {
-      variant:'success'
-    })
-  };
-  
+  // const { enqueueSnackbar } = useSnackbar();
+
+  // const handleProductsToShoppingCart = (id, name, price) => {
+  //   // bring the current products in the shopping cart
+  //   const currentShoppingData =
+  //     JSON.parse(localStorage.getItem("shopping_cart")) || [];
+
+  //   // Verify if certain product is in the shoppingCart comparing item.id
+  //   const isProductInCart = currentShoppingData.some((item) => item.id === id);
+
+  //   // on that case, the operation is not executed
+  //   if (isProductInCart) {
+  //     return;
+  //   }
+
+  //   // create an object for the new shoppingCart item
+  //   const newItem = {
+  //     id,
+  //     name,
+  //     price,
+  //   };
+
+  //   // a new copy of the array using destructuaration and make the
+  //   //insertion of the newItem
+
+  //   const newShoppingData = [...currentShoppingData, newItem];
+
+  //   // update shoppingData state
+  //   setShoppingData(newShoppingData);
+
+  //   // set new shopping cart on localStorage
+  //   localStorage.setItem("shopping_cart", JSON.stringify(newShoppingData));
+
+  //   enqueueSnackbar("Producto agregado al carrito", {
+  //     variant: "success",
+  //   });
+  // };
 
   return (
     <Card
@@ -68,13 +72,14 @@ export default function ProductCard({ id, name, price }) {
         },
         width: { lg: 250, sm: 220, xs: 300 },
       }}
+      onClick={() => onProductClick(product)}
     >
-      <CardActionArea onClick={()=>{}}>
+      <CardActionArea onClick={() => {}}>
         <CardMedia
           component="img"
           image="https://via.placeholder.com/200"
           height={{ lg: 200 }}
-          alt="imagen pitera"
+          alt={name}
           sx={{ padding: "8px 6px" }}
         />
         <CardContent>
@@ -90,11 +95,11 @@ export default function ProductCard({ id, name, price }) {
           variant="contained"
           sx={{ fontSize: "12px", flexGrow: 1 }}
           onClick={(e) => {
-            e.preventDefault();
-            handleProductsToShoppingCart(id, name, price)
+            // e.preventDefault();
+            // handleProductsToShoppingCart(id, name, price);
           }}
         >
-          Add
+          Ver mas
         </Button>
       </CardActions>
     </Card>
