@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Sequelize } from 'sequelize';
-import { Producto, Precio, Pedido, Prod_pedido } from '../models/asosiations.js'
+import { Producto, Precio, Pedido, Prod_pedido, Direccion, Usuario, Pago } from '../models/asosiations.js'
 import { generateId } from '../helpers/tokens.js';
 import fecha_actual from '../helpers/fecha_actual.js';
 
@@ -13,12 +13,16 @@ const stripeCliente = stripe(process.env.STRIPE_SECRET_KEY);
 const createCheckout = async (req, res) => {
     try {
         const idCliente = req.params.id
+        const id_direccion = req.params.id_direccion;
+
         //Creamos el objeto shoppingCart el cual contiene los productos dentro del carrito
         const shoppingCart = req.body;
         console.log(shoppingCart);
 
         // Creamos un arreglo para almacenar los datos de los productos
         const datosArray = [];
+
+        
 
         // Recorremos el carrito de compras
         for (const item of shoppingCart) {
@@ -36,18 +40,23 @@ const createCheckout = async (req, res) => {
 
         //Lo pasamos a string para ser aceptado por stripe
         const datosProductos = JSON.stringify(datosArray);
-        const datosProd = { datosProductos }
+        // Creamos los metadatos que incluyen el ID de la dirección
+        const metadata = {
+            direccion_id: id_direccion,
+            datosProductos:  datosProductos ,
+        };
 
         //Creamos la sesion donde line_items toma el precio, id y cantidad por cada producto 
         const session = await stripeCliente.checkout.sessions.create({
             line_items: shoppingCart,
             mode: 'payment',
             customer: idCliente,
-            metadata: datosProd,
+            metadata: metadata,
             success_url: `http://localhost:5173/`,
             cancel_url: `http://localhost:5173/recomendations`,
         })
         console.log(session.url);
+        console.log(session.metadata);
         //Redireccionar al cliente a la pagina de pago de Stripe
         res.redirect(session.url);
 
@@ -93,6 +102,9 @@ const eventController = async (req, res) => {
 
                 const datosProductos = metadata.datosProductos
 
+                //Parseo JSON en string
+                const id_direccion = metadata.direccion_id;
+
                 // Convertir la cadena JSON en un objeto
                 const productos = JSON.parse(datosProductos);
 
@@ -109,6 +121,7 @@ const eventController = async (req, res) => {
                 const pedido = await Pedido.create({
                     id_pedido: idPedido,
                     id_usuario: checkoutSessionCompleted.customer,
+                    id_direccion: id_direccion,
                     fecha_pedido: fecha,
                     estado: 'Pendiente',
                     metodo_pago: metodoPago
@@ -125,6 +138,17 @@ const eventController = async (req, res) => {
                         cantidad: producto.quantity
                     })
                 };
+
+                //Crear PAGO
+                await Pago.create({
+                    id_pago: generateId(),
+                    id_usuario: checkoutSessionCompleted.customer,
+                    id_sesion: checkoutSessionCompleted.id,
+                    id_pedido: idPedido,
+                    monto: checkoutSessionCompleted.amount_total,
+                    moneda: checkoutSessionCompleted.currency,
+                    estado: "Completado"
+                })
                     
                 
 
