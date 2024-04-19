@@ -1,9 +1,8 @@
 import {DataTypes} from 'sequelize'
 import conexion from '../db/conexion.js'
 
-
-const Pedido = conexion.define('pedido', {
-    id_pedido: {
+const Pago = conexion.define('pago', {
+    id_pago: {
         type: DataTypes.STRING,
         primaryKey: true,
         allowNull: false
@@ -12,19 +11,26 @@ const Pedido = conexion.define('pedido', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    id_direccion: {
+    id_sesion: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    fecha_pedido: {
-        type: DataTypes.DATE,
+    id_pedido: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    monto: {
+        type: DataTypes.DECIMAL,
+        allowNull: false
+    },
+    moneda: {
+        type: DataTypes.STRING,
         allowNull: false
     },
     estado: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    metodo_pago: DataTypes.STRING
+    }
 })
 
-export default Pedido
+export default Pago;

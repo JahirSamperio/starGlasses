@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { Sequelize } from 'sequelize';
-import { Producto, Precio, Pedido, Prod_pedido, Envio } from '../models/asosiations.js'
+import { Producto, Precio, Pedido, Prod_pedido, Envio, Direccion } from '../models/asosiations.js'
 import { generateId } from '../helpers/tokens.js';
 import { check, validationResult } from 'express-validator';
 
@@ -54,19 +54,38 @@ const actualizarEnvio = async (req, res) => {
                 id_envio
             }
         })
-        console.log(envio);
         
         return res.status(200).json({
             msg: "Envio actualizado exitosamente!"
         })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             err: error
         })
     }
 }
 
+const filtroEnvio = async(req, res) => {
+    try {
+        const {estado} = req.body;
+
+        const envios = await Envio.findAll({where: {estado}})
+
+        return res.status(200).json({
+            envios
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
+
+
+
 export {
     crearEnvio,
-    actualizarEnvio
+    actualizarEnvio,
+    filtroEnvio
 }
