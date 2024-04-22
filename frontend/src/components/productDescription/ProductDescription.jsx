@@ -1,7 +1,8 @@
 import { Button, Container, IconButton, Typography } from "@mui/material";
-import React from "react";
 
-export default function ProductDescription() {
+import {ShoppingCart} from '@mui/icons-material'
+
+export default function ProductDescription({id, name, price, description, }) {
   return (
     <Container
       component="section"
@@ -47,10 +48,15 @@ export default function ProductDescription() {
 
       <Container sx={{ display: "flex", justifyContent: "center", mt: "24px" }}>
         <Button
-          sx={{ margin: "0 12px", width: { md: "80%", sm: "90%" } }}
+          sx={{ margin: "0 12px", width: { md: "90%", sm: "95%", xs:'100%' } }}
           variant="contained"
+          onClick={(e) => {
+             e.preventDefault();
+             handleProductsToShoppingCart(id, name, price);
+          }}
         >
-          Agregar al carrito
+          <ShoppingCart/>
+          {`Agregar al carrito`}  
         </Button>
       </Container>
     </Container>
