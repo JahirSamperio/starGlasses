@@ -62,10 +62,10 @@ export default function Login() {
         elevation={10}
         sx={{
           padding: 3,
-          minHeight:{sm:"70vh"},
+          minHeight:{sm:"520px"},
           width: { xs: 300, sm: 360 },
           margin: "40px auto",
-          borderRadius:"12px"
+          borderRadius:"12px",
         }}
       >
         <Grid align="center">
