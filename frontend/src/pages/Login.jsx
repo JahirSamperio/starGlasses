@@ -102,7 +102,7 @@ export default function Login() {
         <FormControlLabel control={<CheckBox name='checkedB' color="primary"/>} sx={{paddingLeft:3,mt:1}} label="Recuerdáme"/>        <Button type="submit" variant="outlined" sx={{ margin:"12px 0"}} fullWidth>
           Iniciar sesión
         </Button>
-        <Typography><Link>Reestablecer contraseña.</Link></Typography>
+        <Typography component={NavLink} to={"/password-restore"}><Link>Reestablecer contraseña.</Link></Typography>
         <Typography>¿Aún no tiene una cuenta? <Link component={NavLink} to={"/register"}>Regístrese.</Link></Typography>
       </Paper>
     </Grid>

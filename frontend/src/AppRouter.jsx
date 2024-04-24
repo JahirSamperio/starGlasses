@@ -8,6 +8,11 @@ import { Footer } from "./components/footer/Footer";
 import { ShoppingCart } from "./pages/ShoppingCart";
 import { Recomendations } from "./pages/Recomendations";
 import  ProductDetails  from "./pages/ProductDetails";
+import { RetrivePassword } from "./pages/RetrivePassword";
+import { RetrivePasswordConfirm } from "./pages/RetrivePasswordConfirm";
+
+import { Main } from "./pages/Dashboard/Main";
+import { Account } from "./pages/Account/Account";
 
 const navArrayLinks = [
   {
@@ -35,6 +40,16 @@ function App() {
             <Route path="/shopping-cart" element={<ShoppingCart />} />
             <Route path="/recomendations" element={<Recomendations/>}/>
             <Route path="/product/:id" element={<ProductDetails/>}/>
+            <Route path= "/password-restore" element={<RetrivePassword/>}/>
+            <Route path="/password-restore/confirmed" element={<RetrivePasswordConfirm/>}/>
+            
+            {/* Rutas de la dashboard*/}
+            <Route path="/dashboard/main" element={<Main/>}/>
+
+            {/*Rutas de configuracion de la cuenta*/}
+            <Route path="/account/user/:id" element={<Account/>}/>
+
+            
           </Routes>
         </div>
         <Footer />

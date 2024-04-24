@@ -17,6 +17,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 import { newUserSchema } from "../../validations/newUserSchema";
+import { registerUser } from '../redux/actions/users/registerUser';
+
 
 export default function Register() {
   const {
@@ -29,6 +31,7 @@ export default function Register() {
 
   const onSubmit = (data) => {
     console.log(data);
+    
   };
 
   return (
