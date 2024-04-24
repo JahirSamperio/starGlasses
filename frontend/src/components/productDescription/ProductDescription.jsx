@@ -2,7 +2,7 @@ import { Button, Container, IconButton, Typography } from "@mui/material";
 
 import {ShoppingCart} from '@mui/icons-material'
 
-export default function ProductDescription({id, name, price, description, }) {
+export default function ProductDescription({id, name, price, description,handleAddToCart }) {
   return (
     <Container
       component="section"
@@ -52,7 +52,7 @@ export default function ProductDescription({id, name, price, description, }) {
           variant="contained"
           onClick={(e) => {
              e.preventDefault();
-             handleProductsToShoppingCart(id, name, price);
+             handleAddToCart(id, name, price);
           }}
         >
           <ShoppingCart/>

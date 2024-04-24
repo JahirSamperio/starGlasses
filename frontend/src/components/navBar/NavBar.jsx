@@ -10,9 +10,9 @@ import {
 import NavListDrawer from "./NavListDrawer";
 import { useState } from "react";
 
-
 import { Menu, ShoppingBagRounded, AccountCircle } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
+import { ItemMenu } from "../itemMenu/ItemMenu";
 
 export default function NavBar({ navArrayLinks }) {
   const [open, setOpen] = useState(false);
@@ -26,11 +26,16 @@ export default function NavBar({ navArrayLinks }) {
           >
             <Menu color="inherit" fontSize="large" />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow:{sm:0.5, xs:1}}}>
+          <Typography variant="h6" sx={{ flexGrow: { sm: 0.5, xs: 1 } }}>
             StarGlasses
           </Typography>
 
-          <Box sx={{ display: { xs: "none", sm: "block"}, flexGrow:{xs:1,sm:.5}}}>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "block" },
+              flexGrow: { xs: 1, sm: 0.5 },
+            }}
+          >
             {navArrayLinks.map((item) => (
               <Button
                 component={NavLink}
@@ -44,20 +49,18 @@ export default function NavBar({ navArrayLinks }) {
             ))}
           </Box>
           <Box>
-            <Button component={NavLink} to={'/shopping-cart'}>
-              <ShoppingBagRounded color="secondary"/>
+            <Button component={NavLink} to={"/shopping-cart"}>
+              <ShoppingBagRounded color="secondary" />
             </Button>
             <Button
-              variant="filled"
+              variant="contained"
               component={NavLink}
               color="secondary"
               to={"/login"}
             >
               Iniciar sesión
-            </Button> 
-            <IconButton color="secondary">
-              <AccountCircle/>
-            </IconButton>
+            </Button>
+            <ItemMenu />
           </Box>
         </Toolbar>
       </AppBar>

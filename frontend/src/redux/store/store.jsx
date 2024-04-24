@@ -3,11 +3,18 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { UsersReducer } from "../slices/users/indexUsers";
 import { ShoppingCartReducer } from "../slices/shoppingCart/shoppingCartIndex";
 import { ProductReducer } from "../slices/products/productsIndex";
+import {AppointmentReducers} from '../slices/appointments/indexAppointments';
+import {OrdersReducers} from '../slices/orders/indexOrders';
+import { SalesReducer } from "../slices/sales/salesIndex";
+
 
 const combineReducer = combineReducers({
     users: UsersReducer,
     shoppingcart: ShoppingCartReducer,
-    products:ProductReducer
+    products:ProductReducer,
+    orders:OrdersReducers,
+    appointments:AppointmentReducers,
+    sales:SalesReducer
 });
 
 const rootReducer = (state, action) =>{

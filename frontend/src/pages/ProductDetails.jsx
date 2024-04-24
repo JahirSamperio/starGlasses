@@ -19,50 +19,6 @@ function ProductDetails() {
 
   const { productDetailsData } = useSelector((state) => state.products.getById);
 
- // props for shoppingCart = id, name, price
-  const [shoppingData, setShoppingData] = useState();
-
-  useEffect(() => {
-    setShoppingData(JSON.parse(localStorage.getItem("shopping_cart")) || []);
-  }, []);
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const handleProductsToShoppingCart = (id, name, price) => {
-    // bring the current products in the shopping cart
-    const currentShoppingData =
-      JSON.parse(localStorage.getItem("shopping_cart")) || [];
-
-    // Verify if certain product is in the shoppingCart comparing item.id
-    const isProductInCart = currentShoppingData.some((item) => item.id === id);
-
-    // on that case, the operation is not executed
-    if (isProductInCart) {
-      return;
-    }
-
-    // create an object for the new shoppingCart item
-    const newItem = {
-      id,
-      name,
-      price,
-    };
-
-    // a new copy of the array using destructuaration and make the
-    //insertion of the newItem
-
-    const newShoppingData = [...currentShoppingData, newItem];
-
-    // update shoppingData state
-    setShoppingData(newShoppingData);
-
-    // set new shopping cart on localStorage
-    localStorage.setItem("shopping_cart", JSON.stringify(newShoppingData));
-
-    enqueueSnackbar("Producto agregado al carrito", {
-      variant: "success",
-    });
-  };
 
   // const {
   //   id_lentes,
@@ -95,16 +51,18 @@ function ProductDetails() {
       sx={{
         width: "95%",
         margin: "36px auto",
+        
       }}
     >
       <Container
         sx={{
           alignItems: "center",
           display: "flex",
-          justifyContent: "center", // Centra los elementos horizontalmente
+          justifyContent: "center", 
           padding: "12px",
           flexDirection: { xs: "column", md: "column", lg: "row" },
-          mt:{md:'86px'}
+          mt:'86px',
+
         }}
       >
         <Container component="section">
@@ -113,7 +71,8 @@ function ProductDetails() {
               width: { xs: "100%", sm: "90%", md: "65%", lg: "90%" },
               height: { xs: "312px", sm: "512px", md: "415px", lg: "415px" },
               bgcolor: "black",
-              borderRadius:'6px'
+              borderRadius:'6px',
+              margin:'24px 24px auto auto'
             }}
           ></Container>
           <Carrousel />
