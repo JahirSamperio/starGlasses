@@ -3,10 +3,10 @@ import * as yup from 'yup';
 const requiredFieldMessage = "es un campo obligatorio";
 
 export const newUserSchema = yup.object().shape({
-  name: yup.string().required( `Nombre ${requiredFieldMessage}`),
-  lastName: yup.string().required(`Apellido paterno ${requiredFieldMessage}`),
-  lastNameM : yup.string(),
-  phone: yup
+  nombre: yup.string().required( `Nombre ${requiredFieldMessage}`),
+  apellido_paterno: yup.string().required(`Apellido paterno ${requiredFieldMessage}`),
+  apellido_materno: yup.string(),
+  telefono: yup
     .number("Formato incorrecto")
     .required(`Número telefónico${requiredFieldMessage}`),
   email: yup.string()
