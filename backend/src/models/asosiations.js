@@ -9,9 +9,10 @@ import Pago from './Pago.js';
 import Cita from './Cita.js';
 
 //Productos
-Producto.hasOne(Precio, {foreignKey: 'id_precio'});
+Producto.belongsTo(Precio, {foreignKey: 'id_precio'});
 
-Precio.belongsTo(Producto, {foreignKey: 'id_precio'});
+Precio.hasOne(Producto, {foreignKey: 'id_precio'});
+
 
 Pedido.hasMany(Prod_pedido, {foreignKey: 'id_pedido'});
 

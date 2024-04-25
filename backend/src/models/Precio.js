@@ -3,7 +3,7 @@ import conexion from '../db/conexion.js';
 
 const Precio = conexion.define('producto_lentes_precio', {
     id_precio: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         primaryKey: true
     },
@@ -39,14 +39,6 @@ const Precio = conexion.define('producto_lentes_precio', {
             if (!producto_lentes_precio.oferta !== null) {
                 producto_lentes_precio.estado = 'Inactiva';
             } else {
-                producto_lentes_precio.estado = 'Activa';
-            }
-        },
-        beforeUpdate: function (producto_lentes_precio) {
-            // Comprueba si el valor anterior de oferta es diferente al nuevo valor y si hay una oferta disponible
-            const ofertaCambiada = producto_lentes_precio.changed('oferta');
-            const ofertaActual = producto_lentes_precio.getDataValue('oferta');
-            if (ofertaCambiada && ofertaActual !== null) {
                 producto_lentes_precio.estado = 'Activa';
             }
         }
