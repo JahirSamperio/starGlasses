@@ -253,19 +253,20 @@ const perfilProducto = async (req, res) => {
 const allProducts = async (req, res) => {
     try {
         const productos = await Producto.findAll({
-            include:{
-                model: Precio,
-                attributes: [
-                    'precio_venta',
-                    'oferta',
-                    'fecha_fin_oferta'
-                ]
-                }
+            include: [{
+                model: Precio
+                // attributes: [
+                //     'precio_venta',
+                //     'oferta',
+                //     'fecha_fin_oferta'
+                // ]
+            }]
         });
         return res.status(200).json({
             productos
         })
     } catch (error) {
+        console.log(error);
         return res.status(500).json({
             msg: "Error en el servidor"
         });
@@ -358,13 +359,13 @@ const masVendido = async (req, res) => {
         const productos = await Prod_pedido.findAll({
             include: {
                 model: Producto,
-                // include: {
-                //     model: Precio,
-                //     attributes: [
-                //         'precio_venta', 
-                //         'precio_compra'
-                //     ]
-                // },          
+                include: {
+                    model: Precio,
+                    attributes: [
+                        'precio_venta', 
+                        'precio_compra'
+                    ]
+                },          
                 attributes: ['nombre']          
             },
             attributes: [

@@ -54,7 +54,7 @@ const Producto = conexion.define('producto_lentes', {
         allowNull: false
     },
     id_precio: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
     }
 })
 

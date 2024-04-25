@@ -7,6 +7,7 @@ import direccionRouter from './direccion.js'
 import citaRouter from './cita.js'
 import ventasRouter from './ventas.js'
 import pedidoRouter from './pedido.js'
+import pagosRouter from './pagos.js'
 
 const app = express();
 
@@ -27,5 +28,7 @@ app.use('/cita', citaRouter);
 app.use('/ventas', ventasRouter);
 
 app.use('/pedido', pedidoRouter);
+
+app.use('/pagos', pagosRouter);
 
 export default app;
