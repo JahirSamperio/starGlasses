@@ -10,14 +10,16 @@ export const Products = () => {
   const dispatch = useDispatch();
 
   // Obtener el estado de la lista de productos
-  const { loading, success, productListData } = useSelector(
-    (state) => state.products.get
-  );
+  const { error, success, productListData } = useSelector((state) => state.products.get);
 
   useEffect(() => {
     // Despachar la acción para obtener la lista de productos
     dispatch(getProductListAction());
-  }, [dispatch]);
+  }, []);
+
+  useEffect(()=>{
+    console.log(productListData);
+  },[productListData]);
 
   // Manejar el clic en un producto
   const handleProductClick = (productId) => {

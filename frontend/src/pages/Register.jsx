@@ -13,6 +13,10 @@ import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import { NavLink } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
+import {useDispatch, useSelector} from 'react-redux';
+import { useNavigate } from "react-router-dom";
+
+
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
@@ -21,6 +25,12 @@ import { registerUser } from '../redux/actions/users/registerUser';
 
 
 export default function Register() {
+  
+  const {loading, success, error, userData} = useSelector((state) => state.users.new)
+  const dispacth = useDispatch();
+
+
+
   const {
     register,
     handleSubmit,
@@ -31,7 +41,7 @@ export default function Register() {
 
   const onSubmit = (data) => {
     console.log(data);
-    
+    dispacth(registerUser(data));    
   };
 
   return (
@@ -57,7 +67,7 @@ export default function Register() {
           </Avatar>
         </Grid>
         <TextField
-          {...register("name")}
+          {...register("nombre")}
           sx={{ mt: 2 }}
           id="nombre"
           label="Nombre"
@@ -69,7 +79,7 @@ export default function Register() {
         />
         <Box sx={{ mt: 2, display: { sm: "flex", xs: "block" } }}>
           <TextField
-            {...register("lastName")}
+            {...register("apellido_paterno")}
             sx={{
               width: { xs: "100%", sm: "auto" }, // Usar fullWidth solo en xs
               mr: { sm: 1, xs: 0 },
@@ -83,7 +93,7 @@ export default function Register() {
             error={!!errors.lastName}
           />
           <TextField
-            {...register("lastNameM")}
+            {...register("apellido_materno")}
             sx={{
               width: { xs: "100%", sm: "auto" }, // Usar fullWidth solo en xs
               ml: { sm: 1, xs: 0 },
@@ -107,7 +117,7 @@ export default function Register() {
                 required
             /> */}
         <TextField
-          {...register("phone")}
+          {...register("telefono")}
           sx={{ mt: 2 }}
           type="number"
           id="phoneNumber"
