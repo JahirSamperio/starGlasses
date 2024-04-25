@@ -11,9 +11,16 @@ import Cita from './Cita.js';
 //Productos
 Producto.hasOne(Precio, {foreignKey: 'id_precio'});
 
+Precio.belongsTo(Producto, {foreignKey: 'id_precio'});
+
 Pedido.hasMany(Prod_pedido, {foreignKey: 'id_pedido'});
 
-Prod_pedido.belongsTo(Pedido, {foreignKey: 'id_pedido'})
+Prod_pedido.belongsTo(Pedido, {foreignKey: 'id_pedido'});
+
+Prod_pedido.belongsTo(Producto, {foreignKey: 'id_lentes'});
+
+Producto.hasMany(Prod_pedido, {foreignKey: 'id_lentes'});
+
 
 //Pedidos
 Pedido.hasOne(Usuario, {foreignKey: 'id_usuario'});

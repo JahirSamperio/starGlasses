@@ -1,12 +1,12 @@
-import {Producto, Precio} from '../models/asosiations.js';
+import {Producto, Precio, Prod_pedido} from '../models/asosiations.js';
 import { check, validationResult } from 'express-validator';
 import {v2 as cloudinary} from 'cloudinary'
 import 'dotenv/config'
 import {Sequelize} from 'sequelize'
 import stripe from 'stripe';
 const stripeCliente = stripe(process.env.STRIPE_SECRET_KEY);
-
-
+import prodMasVendido from '../models/MasVendido.js';
+import { response } from 'express';
 import uploadCloudinary from '../uploads/uploads.js';
 
 //Configurando cloudinary
@@ -51,10 +51,13 @@ const newProduct =  async (req = request, res = response) => {
             images: [secure_url]
         });
 
+
+        //Pasar precio a integral y multiplicarlo por 100 para los centavos y sea admitido por stripe
+        const precioStripe = precio * 100;
         //Creando el producto y precio en Stripe
         const price = await stripeCliente.prices.create({
             product: product.id,
-            unit_amount: precio,
+            unit_amount: precioStripe,
             currency: 'mxn',
         });
         
@@ -236,7 +239,7 @@ const perfilProducto = async (req, res) => {
                     'oferta',
                     'fecha_fin_oferta'
                 ]
-                }});
+            }});
         return res.status(200).json({
             producto
         })
@@ -349,6 +352,42 @@ const ascStock = async (req, res) => {
         })
     }
 }
+
+const masVendido = async (req, res) => {
+    try {
+        const productos = await Prod_pedido.findAll({
+            include: {
+                model: Producto,
+                // include: {
+                //     model: Precio,
+                //     attributes: [
+                //         'precio_venta', 
+                //         'precio_compra'
+                //     ]
+                // },          
+                attributes: ['nombre']          
+            },
+            attributes: [
+                'id_lentes', 
+                [Sequelize.fn('SUM', Sequelize.col('cantidad')), 'Total de productos'], 
+            ],
+            group: ['id_lentes'],
+            order: [['Total de productos', 'DESC']]
+        });
+
+        return res.status(200).json({
+            productos
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
+
+
+
 export {
     newProduct,
     agregarOferta,
@@ -359,5 +398,6 @@ export {
     allOffers,
     getStock,
     descStock,
-    ascStock
+    ascStock,
+    masVendido
 }

@@ -8,4 +8,6 @@ fecha_actual.setSeconds(0);
 
 // Ajustar los milisegundos a 0 (opcional)
 fecha_actual.setMilliseconds(0);
+
 export default fecha_actual;
+
