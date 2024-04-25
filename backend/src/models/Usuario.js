@@ -12,6 +12,18 @@ const Usuario = conexion.define('usuario', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    apellido_paterno: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    apellido_materno: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    telefono: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     email: {
         type: DataTypes.STRING,
         allowNull: false

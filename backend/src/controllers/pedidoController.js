@@ -31,6 +31,7 @@ const detallesPedido = async (req, res) => {
     }
 }
 
+//Buscar estados 
 const filtroPedido = async (req, res) => {
     try {
         const {estado} = req.body;
@@ -46,6 +47,7 @@ const filtroPedido = async (req, res) => {
     }
 }
 
+//Estado disponibles: pendiente, confirmado, cancelado
 const actualizarEstado = async (req, res) => {
     try {
         const { estado } = req.body;
@@ -67,9 +69,27 @@ const actualizarEstado = async (req, res) => {
     }
 }
 
+const pedidosRecientes = async (req, res) => {
+    try {
+        //busca pedidos recientes 
+        const pedidos = await Pedido.findAll({
+            order: [['fecha_pedido', 'DESC']],
+            limit: 6
+        })
+        return res.status(200).json({
+            pedidos
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
+
 export {
     getPedidos,
     detallesPedido,
     filtroPedido,
-    actualizarEstado
+    actualizarEstado,
+    pedidosRecientes
 }

@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import { 
     newProduct, agregarOferta, eliminarProducto, modificarProducto, 
-    perfilProducto, allProducts, allOffers, getStock, descStock, ascStock } from "../controllers/productoController.js";
+    perfilProducto, allProducts, allOffers, getStock, descStock, ascStock, masVendido } from "../controllers/productoController.js";
 
 const router = Router();
 
@@ -24,6 +24,8 @@ router.get('/getStock/', getStock);
 router.get('/descStock/', descStock);
 
 router.get('/ascStock/', ascStock);
+
+router.get('/masVendido', masVendido);
 
 
 export default router

@@ -66,6 +66,9 @@ const registerController = async (req, res) => {
     try {
         //Validacion
         await check('nombre').notEmpty().withMessage('El nombre no puede ir vacio').run(req);
+        await check('apellido_paterno').notEmpty().withMessage('El apellido  no puede ir vacio').run(req);
+        await check('apellido_materno').notEmpty().withMessage('El apellido no puede ir vacio').run(req);
+        await check('telefono').notEmpty().withMessage('El nombre no puede ir vacio').run(req);
         await check('email').isEmail().withMessage('Correo no valido').run(req);
         await check('password').isLength({ min: 8 }).withMessage('Contraseña muy corta').run(req);
 
@@ -78,7 +81,7 @@ const registerController = async (req, res) => {
         }
 
         //extraer los datos
-        const { nombre, email, password } = req.body;
+        const { nombre, email, password, apellido_paterno, apellido_materno, telefono } = req.body;
 
         //Verificar que no haya duplicados
         const existeUsuario = await Usuario.findOne({ where: { email } });
@@ -101,6 +104,9 @@ const registerController = async (req, res) => {
             nombre,
             email,
             password,
+            apellido_paterno, 
+            apellido_materno, 
+            telefono,
             token: generateId()
         });
 
