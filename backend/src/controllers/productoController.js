@@ -2,7 +2,7 @@ import {Producto, Precio, Prod_pedido} from '../models/asosiations.js';
 import { check, validationResult } from 'express-validator';
 import {v2 as cloudinary} from 'cloudinary'
 import 'dotenv/config'
-import {Sequelize} from 'sequelize'
+import {Sequelize, Op} from 'sequelize'
 import stripe from 'stripe';
 const stripeCliente = stripe(process.env.STRIPE_SECRET_KEY);
 import prodMasVendido from '../models/MasVendido.js';
@@ -259,15 +259,21 @@ const allProducts = async (req, res) => {
         const productos = await Producto.findAll({
             include: [{
                 model: Precio
-            }]
+            }],
+            where: { 
+                [Sequelize.Op.not]: {
+                    existencia: 0
+                }
+            }
         });
+
         return res.status(200).json({
             productos
         })
     } catch (error) {
         console.log(error);
         return res.status(500).json({
-            msg: "Error en el servidor"
+            error: "Error en el servidor"
         });
     }
 }
@@ -290,8 +296,7 @@ const allOffers = async (req, res) => {
         })
     } catch (error) {
         return res.status(500).json({
-            msg: "Error en el servidor",
-            error
+            error: "Error en el servidor"
         });
     }
 }
@@ -390,13 +395,17 @@ const masVendido = async (req, res) => {
 const eliminarOferta = async (req, res) => {
     try {
         const { id_lentes } = req.params; 
+        //Buscar el id del producto
         const idPrecio = await Producto.findOne({
             where: {id_lentes},
             attributes: ['id_precio']
         });
 
+        //Obtener el id del precio
         const id_precio = idPrecio.id_precio;
         console.log(id_precio);
+
+        //Eliminar el precio donde el id_precio sea igual
         await Precio.update({
             oferta: 0,
             fecha_inicio_oferta: null,
@@ -421,23 +430,31 @@ const modificarOferta = async (req, res) => {
 
         const { oferta, fecha_inicio_oferta, fecha_fin_oferta } = req.body;
 
+        //Buscar el id del producto
         const { id_lentes } = req.params; 
         const idPrecio = await Producto.findOne({
             where: {id_lentes},
             attributes: ['id_precio']
         });
 
+        //Extraer el id
         const id_precio = idPrecio.id_precio;
-        console.log(id_precio);
 
 
+        //Buscar el precio de venta 
         const verificacion = await Precio.findOne({attributes: ['precio_venta'] ,where: { id_precio }});
 
         const precio_venta = verificacion.precio_venta;
-        const numeroDecimal = parseFloat(precio_venta);
 
+        //Pasarlo de string a float el precio de venta
+        const numeroDecimal = parseFloat(precio_venta);
+        
+        //Pasarlo de string a float 
         const ofertaDecimal = parseFloat(oferta);
+
+        //Si oferta no viene incluida en el body
         if(oferta !== undefined){
+            //SI la oferta del body es mayor al precio de venta no es valido
             if(numeroDecimal < ofertaDecimal){
                 await Precio.update({
                     oferta: oferta,
