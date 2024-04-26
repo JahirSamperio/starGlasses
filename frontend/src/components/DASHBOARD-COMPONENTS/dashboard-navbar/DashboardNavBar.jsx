@@ -11,6 +11,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Divider,
+  Typography,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 
@@ -21,6 +23,7 @@ import {
   DateRange,
   LocalShipping,
   Payments,
+  Dashboard,
 } from "@mui/icons-material";
 
 const linksDashboard = [
@@ -64,7 +67,7 @@ export const DashboardNavBar = ({ links }) => {
         minWidth: { lg: "184px", md: "156px" },
         height: "800px",
         width: { lg: "184px", md: "156px" },
-        display: { lg: "flex", md: "none" },
+        display: { lg: "flex", sm: "none", xs: "none" },
       }}
     >
       <Box
@@ -76,17 +79,21 @@ export const DashboardNavBar = ({ links }) => {
           justifyContent: "flex-start",
         }}
       >
-        <List>
-         {linksDashboard.map((item) => ( 
-          <ListItem disablePadding key={item.name}>
-            <ListItemButton component={NavLink} to={item.path}>
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText>{item.name}</ListItemText>
-            </ListItemButton>
-          </ListItem>
-         ))}
+        <Icon sx={{ margin: "8px auto", width: "auto", height: "auto" }}>
+          <Dashboard sx={{ width: "48px", height: "48px" }} />
+        </Icon>
+        <Typography sx={{ margin: "0px auto" }}>Dashboard</Typography>
+        <Divider />
+        <List sx={{ display: "flex", flexDirection: "column" }}>
+          {linksDashboard.map((item) => (
+            <ListItem disablePadding key={item.name} sx={{ mt: "12px" }}>
+              <ListItemButton component={NavLink} to={item.path}>
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText>{item.name}</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          ))}
         </List>
-
       </Box>
     </Paper>
   );
