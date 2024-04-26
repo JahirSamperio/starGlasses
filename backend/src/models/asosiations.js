@@ -24,17 +24,17 @@ Producto.hasMany(Prod_pedido, {foreignKey: 'id_lentes'});
 
 
 //Pedidos
-Pedido.hasOne(Usuario, {foreignKey: 'id_usuario'});
+Pedido.belongsTo(Usuario, {foreignKey: 'id_usuario'});
 
-Pedido.hasOne(Direccion, {foreignKey: 'id_direccion'});
+Pedido.belongsTo(Direccion, {foreignKey: 'id_direccion'});
 
 //Envios
 Envio.hasOne(Pedido, {foreignKey: 'id_pedido'})
 
 //Direccion
-Direccion.hasOne(Usuario, {foreignKey: 'id_usuario'})
+Direccion.belongsTo(Usuario, {foreignKey: 'id_usuario'})
 
-Direccion.belongsTo(Pedido, {foreignKey: 'id_direccion'});
+Direccion.hasOne(Pedido, {foreignKey: 'id_direccion'});
 
 //Pagos
 Pago.belongsTo(Usuario, {foreignKey: 'id_usuario'});
@@ -43,7 +43,9 @@ Pago.belongsTo(Pedido, {foreignKey: 'id_pedido'})
 
 
 //Cita
-Cita.hasOne(Usuario, {foreignKey: 'id_usuario'})
+Cita.belongsTo(Usuario, {foreignKey: 'id_usuario'})
+
+Usuario.hasMany(Cita, {foreignKey: 'id_usuario'})
 
 
 export {
