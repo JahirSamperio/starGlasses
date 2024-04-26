@@ -29,20 +29,20 @@ const Precio = conexion.define('producto_lentes_precio', {
     },
     estado: {
         type: DataTypes.STRING,
-        defaultValue: 'Inactiva',
+        // defaultValue: 'Inactiva',
         allowNull: false
     }
-}, {
-    hooks: {
-        beforeValidate: function (producto_lentes_precio) {
-            // Cambia el estado a 'activa' si hay una oferta disponible
-            if (!producto_lentes_precio.oferta !== null) {
-                producto_lentes_precio.estado = 'Inactiva';
-            } else {
-                producto_lentes_precio.estado = 'Activa';
-            }
-        }
-    }
-});
+}
+    // hooks: {
+    //     beforeValidate: function (producto_lentes_precio) {
+    //         // Cambia el estado a 'activa' si hay una oferta disponible
+    //         if (!producto_lentes_precio.oferta !== null) {
+    //             producto_lentes_precio.estado = 'Inactiva';
+    //         } else {
+    //             producto_lentes_precio.estado = 'Activa';
+    //         }
+    //     }
+    // }
+);
 
 export default Precio

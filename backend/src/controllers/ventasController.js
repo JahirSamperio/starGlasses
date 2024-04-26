@@ -1,5 +1,5 @@
 import { Pago, Usuario, Pedido, Prod_pedido } from '../models/asosiations.js'
-import { Sequelize, Op } from 'sequelize';
+import { Sequelize, Op,fn } from 'sequelize';
 import fecha_actual from '../helpers/fecha_actual.js';
 
 const getVentas = async (req, res) => {
@@ -100,6 +100,7 @@ const ventasMes = async (req, res) => {
 const ingresosPeriodo = async (req, res) => {
     try {
         let ingresos;
+        let totalIngresos = 0;
         const { periodo } = req.body;
         switch (periodo) {
             case 'Mes':
@@ -109,7 +110,6 @@ const ingresosPeriodo = async (req, res) => {
                 ingresos = await Pago.findAll({
                     include: {
                         model: Pedido,
-                        as: 'pedido',
                         where: {
                             fecha_pedido: {
                                 [Op.and]: [
@@ -118,8 +118,12 @@ const ingresosPeriodo = async (req, res) => {
                                 ]
                             }
                         }
-                    }
+                    },
+                    attributes: ['monto']
                 })
+
+                // Calcular la suma total de los ingresos
+                totalIngresos = calcularIngresos(ingresos);
                 break;
             case 'Dia':
                 const fecha_pedido = fecha_actual.toISOString().split('T')[0];
@@ -128,18 +132,14 @@ const ingresosPeriodo = async (req, res) => {
                         {
                             model: Pedido,
                             as: 'pedido',
-                            attributes: ['fecha_pedido', 'id_pedido', 'metodo_pago'],
                             where: { '$pedido.fecha_pedido$': fecha_pedido }
-                        },
-                        {
-                            model: Usuario,
-                            as: 'usuario',
-                            attributes: ['nombre', 'apellido_paterno']
                         }
                     ],
-                    attributes: ['monto', 'estado'],
-                    order: [[{ model: Pedido, as: 'pedido' }, 'fecha_pedido', 'DESC']]
+                    attributes: ['monto']
                 });
+                
+                // Calcular la suma total de los ingresos
+                totalIngresos = calcularIngresos(ingresos);
                 break;
             case 'Año':
                 const fecha = new Date();
@@ -155,20 +155,19 @@ const ingresosPeriodo = async (req, res) => {
                                 ]
                             }
                         }
-                    }
+                    },
+                    attributes: ['monto']
                 })
+                 // Calcular la suma total de los ingresos
+                 totalIngresos = calcularIngresos(ingresos);
                 break;
             default:
-                ingresos = await Pago.findAll({
-                    include: {
-                        model: Pedido
-                    }
-                })
+                totalIngresos = 0;
                 break;
         }
 
         return res.status(200).json({
-            ingresos
+            totalIngresos
         })
 
     } catch (error) {
@@ -177,6 +176,16 @@ const ingresosPeriodo = async (req, res) => {
             error: "Error en el servidor"
         })
     }
+}
+
+const calcularIngresos = (ingresos) => {
+    let totalIngresos = 0;
+    for(let i = 0; i<ingresos.length; i++){
+        let monto = ingresos[i].monto;
+        let numeroDecimal = parseFloat(monto);
+        totalIngresos += numeroDecimal; 
+    }
+    return totalIngresos;
 }
 export {
     getVentas,

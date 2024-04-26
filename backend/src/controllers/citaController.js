@@ -1,4 +1,4 @@
-import { Cita } from '../models/asosiations.js'
+import { Cita, Usuario } from '../models/asosiations.js'
 import { generateId } from '../helpers/tokens.js';
 import { check, validationResult } from 'express-validator';
 import { Op } from 'sequelize'
@@ -74,7 +74,13 @@ const actualizarEstado = async (req, res) => {
 
 const getCitas = async(req, res) => {
     try {
-        const citas = await Cita.findAll();
+        const citas = await Cita.findAll({
+            include: {
+                model: Usuario,
+                attributes: ['nombre', 'apellido_paterno', 'apellido_materno', 'email', 'telefono']
+            },
+            attributes: ['id_cita', 'fecha_hora', 'estado', 'motivo', 'antecedentes']
+        });
 
         return res.status(200).json({
             citas
@@ -90,7 +96,14 @@ const filtroCitas = async (req, res) => {
     try {
         const { estado } =  req.body;
 
-        const citas = await Cita.findAll({where: {estado}});
+        const citas = await Cita.findAll({
+            include: {
+                model: Usuario,
+                attributes: ['nombre', 'apellido_paterno', 'apellido_materno', 'email', 'telefono']
+            },
+            attributes: ['id_cita', 'fecha_hora', 'estado', 'motivo', 'antecedentes'],
+            where: {estado}
+        });
 
         return res.status(200).json({
             citas
@@ -107,6 +120,11 @@ const proximasCitas = async (req, res) => {
         const fecha_hoy =  new Date();
         console.log(fecha_hoy);
         const citas = await Cita.findAll({
+            include: {
+                model: Usuario,
+                attributes: ['nombre', 'apellido_paterno', 'apellido_materno', 'email', 'telefono']
+            },
+            attributes: ['id_cita', 'fecha_hora', 'estado', 'motivo', 'antecedentes'],
             where: {
                 fecha_hora: { [Op.gt]: fecha_hoy }
             }

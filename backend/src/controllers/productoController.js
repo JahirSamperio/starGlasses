@@ -123,7 +123,8 @@ const agregarOferta = async (req, res) => {
         const producto_oferta = Precio.update({
             oferta,
             fecha_inicio_oferta,
-            fecha_fin_oferta
+            fecha_fin_oferta,
+            estado: 'Activa'
         }, { where: { id_precio } });
 
         return res.status(200).json({
@@ -198,7 +199,10 @@ const modificarProducto = async (req, res) => {
         if (precio !== null) {
             await Precio.update({
                 precio_venta: precio
-            }, {where: { id_precio }})
+            }, 
+            {
+                where: { id_precio }
+            })
         }
         if (precio_compra !== null){
             await Precio.update({
@@ -255,11 +259,6 @@ const allProducts = async (req, res) => {
         const productos = await Producto.findAll({
             include: [{
                 model: Precio
-                // attributes: [
-                //     'precio_venta',
-                //     'oferta',
-                //     'fecha_fin_oferta'
-                // ]
             }]
         });
         return res.status(200).json({
@@ -373,7 +372,8 @@ const masVendido = async (req, res) => {
                 [Sequelize.fn('SUM', Sequelize.col('cantidad')), 'Total de productos'], 
             ],
             group: ['id_lentes'],
-            order: [['Total de productos', 'DESC']]
+            order: [['Total de productos', 'DESC']],
+            limit: 5
         });
 
         return res.status(200).json({
@@ -386,6 +386,97 @@ const masVendido = async (req, res) => {
         })
     }
 }
+
+const eliminarOferta = async (req, res) => {
+    try {
+        const { id_lentes } = req.params; 
+        const idPrecio = await Producto.findOne({
+            where: {id_lentes},
+            attributes: ['id_precio']
+        });
+
+        const id_precio = idPrecio.id_precio;
+        console.log(id_precio);
+        await Precio.update({
+            oferta: 0,
+            fecha_inicio_oferta: null,
+            fecha_fin_oferta: null,
+            estado: 'Inactiva'
+        },{where: { id_precio }})
+
+
+        return res.status(200).json({
+            msg: "Oferta eliminada exitosamente"
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
+
+const modificarOferta = async (req, res) => {
+    try {
+
+        const { oferta, fecha_inicio_oferta, fecha_fin_oferta } = req.body;
+
+        const { id_lentes } = req.params; 
+        const idPrecio = await Producto.findOne({
+            where: {id_lentes},
+            attributes: ['id_precio']
+        });
+
+        const id_precio = idPrecio.id_precio;
+        console.log(id_precio);
+
+
+        const verificacion = await Precio.findOne({attributes: ['precio_venta'] ,where: { id_precio }});
+
+        const precio_venta = verificacion.precio_venta;
+        const numeroDecimal = parseFloat(precio_venta);
+
+        const ofertaDecimal = parseFloat(oferta);
+        if(oferta !== undefined){
+            if(numeroDecimal < ofertaDecimal){
+                await Precio.update({
+                    oferta: oferta,
+                    fecha_inicio_oferta: fecha_inicio_oferta,
+                    fecha_fin_oferta: fecha_fin_oferta,
+                    estado: 'Activa'
+                },{where: { id_precio }})
+        
+        
+                return res.status(200).json({
+                    msg: "Oferta modificada exitosamente"
+                })
+            } else {
+                return res.status(406).json({
+                    msg: "Oferta mayor al precio de venta"
+                })
+            }
+        } else {
+            await Precio.update({
+                fecha_inicio_oferta: fecha_inicio_oferta,
+                fecha_fin_oferta: fecha_fin_oferta,
+                estado: 'Activa'
+            },{where: { id_precio }})
+            return res.status(200).json({
+                msg: "Oferta modificada exitosamente"
+            })
+        }
+
+
+
+
+        
+    } catch (error) {
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
+
 
 
 
@@ -400,5 +491,7 @@ export {
     getStock,
     descStock,
     ascStock,
-    masVendido
+    masVendido,
+    eliminarOferta,
+    modificarOferta
 }
