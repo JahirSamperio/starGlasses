@@ -142,6 +142,15 @@ const eventController = async (req, res) => {
                         id_lentes: id_lentes,
                         cantidad: producto.quantity
                     })
+                    
+                    //Restar existencia por venta de los productos
+                    const prod = await Producto.findByPk(id_lentes);
+
+                    await Producto.update({
+                        existencia: prod.existencia - producto.quantity
+                    }, {
+                        where: {id_lentes}
+                    })
                 };
 
                 const monto = checkoutSessionCompleted.amount_total/100;
