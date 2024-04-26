@@ -8,7 +8,7 @@ export const getProductListAction = () => async (dispatch) =>{
 
         dispatch(fetchGetProductList());
         const {data} = await axios.get('http://localhost:8080/producto/allProducts/');
-        console.log(data.response);
+n
         dispatch(fetchGetProductListSuccess(data.response));
 
     }catch(error){

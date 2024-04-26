@@ -21,7 +21,7 @@ export const Products = () => {
     console.log(productListData);
   },[productListData]);
 
-  // Manejar el clic en un producto
+
   const handleProductClick = (productId) => {
     // Navegar a la página de detalles del producto
     navigate(`/product/${productId}`);
@@ -30,7 +30,7 @@ export const Products = () => {
   return (
     <Paper elevation={10} sx={{ padding: "20px", margin: "12px 16px" }}>
       <Grid container spacing={2} sx={{}}>
-        {success === true &&
+        {/* {success === true &&
           productListData.slice(0, 8).map((product, index) => (
             <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -40,7 +40,7 @@ export const Products = () => {
                 />
               </div>
             </Grid>
-          ))}
+          ))} */}
       </Grid>
     </Paper>
   );
