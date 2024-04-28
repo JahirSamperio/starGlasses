@@ -14,6 +14,11 @@ import { RetrivePasswordConfirm } from "./pages/RetrivePasswordConfirm";
 import { Main } from "./pages/Dashboard/Main";
 import { Account } from "./pages/Account/Account";
 import { Inventory } from "./pages/Dashboard/Inventory";
+import { Stats } from "./pages/Dashboard/Stats";
+import { Appointments } from "./pages/Dashboard/Appointments";
+import { Orders } from "./pages/Dashboard/Orders";
+import {Payments} from "./pages/Dashboard/Payments"
+
 
 const navArrayLinks = [
   {
@@ -47,6 +52,10 @@ function App() {
             {/* Rutas de la dashboard*/}
             <Route path="/dashboard/main" element={<Main/>}/>
             <Route path="/dashboard/inventory" element={<Inventory/>}/>
+            <Route path="/dashboard/stats" element={<Stats/>}/>
+            <Route path="/dashboard/appointments" element={<Appointments/>}/>
+            <Route path="/dashboard/orders" element={<Orders/>}/>
+            <Route path="/dashboard/payments" element={<Payments/>}/>
 
             {/*Rutas de configuracion de la cuenta*/}
             <Route path="/account/user/:id" element={<Account/>}/>

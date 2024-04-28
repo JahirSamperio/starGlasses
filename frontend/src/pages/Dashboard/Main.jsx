@@ -6,6 +6,7 @@ import TodaySales from "../../components/DASHBOARD-COMPONENTS/dashboardHome/Toda
 import RecentlyOrderedTable from "../../components/DASHBOARD-COMPONENTS/dashboardHome/RecentlyOrderedTable";
 import BestSellersTable from "../../components/DASHBOARD-COMPONENTS/dashboardHome/BestSellersTable";
 import CurrentOffers from "../../components/DASHBOARD-COMPONENTS/dashboardHome/CurrentOffers";
+import MonthSales from "../../components/DASHBOARD-COMPONENTS/dashboardHome/MonthSales";
 
 
 export const Main = () => {
@@ -67,7 +68,7 @@ export const Main = () => {
             }}
           >
             <RecentlyOrderedTable/>
-            <BestSellersTable/>
+            <TodaySales/>
           </Box>
           <Box
             sx={{
@@ -76,10 +77,13 @@ export const Main = () => {
               height: { md: "33%", sm: "324px", xs: "524px" },
               padding: "12px 18px",
               margin: "10px auto",
+              display:{md:"flex"},
+              justifyContent:'space-around'
               
             }}
           >
             <CurrentOffers/>
+            <MonthSales/>
           </Box>
         </Paper>
       </Box>
