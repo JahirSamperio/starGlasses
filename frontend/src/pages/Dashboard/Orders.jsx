@@ -2,7 +2,7 @@ import React from 'react'
 import { Box,Paper, } from '@mui/material';
 import { DashboardNavBar } from '../../components/DASHBOARD-COMPONENTS/dashboard-navbar/DashboardNavBar';
 
-export const Appointments = () => {
+export const Orders = () => {
     return (
         <Paper
           elevation={1}
