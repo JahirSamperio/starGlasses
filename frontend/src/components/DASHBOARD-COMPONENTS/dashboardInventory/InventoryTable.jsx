@@ -29,7 +29,7 @@ function TablePaginationActions(props) {
   };
 
   return (
-    <Box sx={{ flexShrink: 0, ml: 2.5 }}>
+    <Box sx={{ flexShrink: 0, ml: 2.5, width:'100%', }}>
       <IconButton
         onClick={handleFirstPageButtonClick}
         disabled={page === 0}
