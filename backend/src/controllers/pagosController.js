@@ -15,7 +15,7 @@ const listaPagos = async (req, res) => {
             attributes: ['id_pago', 'monto', 'estado'],
             limit: 8 
         });
-        return res.status(200).json({
+        return res.json(200, {
             pagos
         })
     } catch (error) {

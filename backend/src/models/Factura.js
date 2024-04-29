@@ -8,6 +8,10 @@ const Factura = conexion.define('factura', {
         autoIncrement: true,
         allowNull: false
     },
+    fecha_emision: {
+        type: DataTypes.DATE,
+        allowNull: false
+    },
     id_pago: {
         type: DataTypes.STRING
         // allowNull: false

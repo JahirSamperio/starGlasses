@@ -3,6 +3,6 @@ import { crearFactura } from '../controllers/facturaController.js';
 
 const router = Router();
 
-router.post('/crear', crearFactura);
+router.get('/crear', crearFactura);
 
 export default router;
