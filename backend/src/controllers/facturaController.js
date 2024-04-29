@@ -1,48 +1,71 @@
 import Factura from '../models/Factura.js';
-import { v2 as cloudinary } from 'cloudinary'
-import 'dotenv/config'
-import { Sequelize, Op } from 'sequelize'
-import uploadCloudinary from '../uploads/uploads.js';
-import pdf from 'html-pdf'
-import tmp from 'tmp'
+import buildPDF from '../helpers/crearFactura.js';
+import PdfkitConstruct from 'pdfkit-construct';
 
-//Configurando cloudinary
-cloudinary.config(process.env.CLOUDINARY_URL);
 
-// const crearFactura = async (req, res) => {
-//     try {
-//         // Crear un archivo temporal para el PDF
-//         tmp.file((err, tempFilePath, fd, cleanupCallback) => {
-//             if (err) {
-//                 console.error(err);
-//                 return;
-//             }
-//             // Generar el PDF utilizando html-pdf y los datos recibidos en la solicitud
-//             const options = { format: 'Letter' };
-//             const contenidoHTML = '<h1>¡Hola, mundo!</h1>';
-//             pdf.create(contenidoHTML, options).toFile(tempFilePath, async (err, res) => {
-//                 if (err) {
-//                     console.error(err);
-//                     cleanupCallback(); // Limpia el archivo temporal en caso de error
-//                     return;
-//                 }
-//             })
-//         })
-//         try {
-//             const result = await cloudinary.uploader.upload(tempFilePath, { resource_type: 'raw' });
-//             console.log('PDF cargado a Cloudinary:', result.secure_url);
-//             cleanupCallback(); // Limpia el archivo temporal después de cargarlo a Cloudinary
-//           } catch (error) {
-//             console.error('Error al cargar el PDF a Cloudinary:', error);
-//             cleanupCallback(); // Limpia el archivo temporal en caso de error
-//           }
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({
-//             error: "Error en el servidor"
-//         })
-//     }
-// }
+const crearFactura = async (req, res) => {
+    try {
+        const doc = new PdfkitConstruct({
+            bufferPages: true
+        });
+
+        const stream = res.writeHead(200, {     //Definiendo la descarga del pdf con un estado 200 en lugar de .status(200)
+            "Content-Type": "application/pdf",
+            "Content-Disposition": "attachment; filename=factura.pdf"
+        })
+
+        // set the header to render in every page
+        doc.setDocumentHeader({}, () => {
+
+
+            doc.lineJoin('miter')
+                .rect(0, 0, doc.page.width, doc.header.options.heightNumber).fill("#ededed");
+
+            doc.fill("#115dc8")
+                .fontSize(20)
+                .text("Hello world header", doc.header.x, doc.header.y);
+        });
+
+        const productos = [
+            {
+                no: 1,
+                descripcion: "Lentes",
+                price: 24.55,
+                quantity: 2,
+                subtotal: 355
+            }
+        ]
+        // Detalles de la factura
+        doc.addTable(
+            [
+                { key: 'no', label: 'No', align: 'left' },
+                { key: 'descripcion', label: 'Descripcion', align: 'left' },
+                { key: 'price', label: 'Price', align: 'right' },
+                { key: 'quantity', label: 'Quantity' },
+                { key: 'subtotal', label: 'Subtotal', align: 'right' }
+            ], productos, {
+                border: null,
+                width: "fill_body",
+                striped: true,
+                stripedColors: ["#f6f6f6", "#d6c4dd"],
+                cellsPadding: 10,
+                marginLeft: 45,
+                marginRight: 45,
+                headAlign: 'center'
+            });
+
+
+        // render tables
+        doc.render();
+
+        doc.end();
+    } catch (error) {
+        console.log(error);
+        return res.json(500, {
+            error: "Error en el servidor"
+        })
+    }
+}
 
 export {
     crearFactura
