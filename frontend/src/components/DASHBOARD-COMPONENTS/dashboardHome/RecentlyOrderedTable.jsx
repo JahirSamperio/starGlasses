@@ -102,9 +102,9 @@ function createData(name, calories, fat, carbs, protein, price) {
   
   Row.propTypes = {
     row: PropTypes.shape({
-      calories: PropTypes.number.isRequired,
+      calories: PropTypes.string.isRequired,
       carbs: PropTypes.number.isRequired,
-      fat: PropTypes.number.isRequired,
+      fat: PropTypes.string.isRequired,
       history: PropTypes.arrayOf(
         PropTypes.shape({
           amount: PropTypes.number.isRequired,
@@ -120,10 +120,10 @@ function createData(name, calories, fat, carbs, protein, price) {
   
   const rows = [
     createData('Frozen yoghurt', 'Confirmado', 'TDC/TDB', 24, 4.0, 3.99),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-    createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-    createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-    createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
+    createData('Ice cream sandwich', 'Confirmado', 'TDC/TDB', 37, 4.3, 4.99),
+    createData('Eclair', 'Confirmado', 'TDC/TDB', 24, 6.0, 3.79),
+    createData('Cupcake', 'Confirmado', 'TDC/TDB', 67, 4.3, 2.5),
+    createData('Gingerbread', 'Confirmado', 'TDC/TDB', 49, 3.9, 1.5),
   ];
   
   export default function RecentlyOrderedTable() {
