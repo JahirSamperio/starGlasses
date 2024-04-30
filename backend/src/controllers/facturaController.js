@@ -3,7 +3,7 @@ import PdfkitConstruct from 'pdfkit-construct';
 import fs from 'fs';
 import fecha_actual from '../helpers/fecha_actual.js';
 import { generateIdFactura } from '../helpers/tokens.js';
-import {Pago, Pedido, Usuario, Direccion} from '../models/asosiations.js'
+import {Pago, Pedido, Usuario, Direccion, Prod_pedido, Producto, Precio} from '../models/asosiations.js'
 
 
 const crearFactura = async (req, res) => {
@@ -24,12 +24,50 @@ const crearFactura = async (req, res) => {
             where: {id_pedido}
         })
 
-        console.log(cliente.direccion);
         //Desestructurando el usuario
         const {nombre, apellido_paterno, apellido_materno, telefono, email} = cliente.usuario.dataValues;
 
         //Desestructurando la direccion
         const {direccion} = cliente.usuario_direccion.dataValues
+
+
+        //Buscar productos con el id del pedido        
+        const prod = await Prod_pedido.findAll({
+            include: {
+                model: Producto,
+                attributes: ['nombre'],
+                include: {
+                    model: Precio,
+                    attributes: ['precio_venta']
+                }
+
+            },
+            attributes: ['cantidad'],
+            where: {id_pedido}
+        })
+        let prod_pedido = []
+        let quantity = 0;
+        let descripcion;
+        let price = 0;
+        let sub = 0;
+
+        for(let i = 0; i < prod.length; i++){
+            quantity = prod[i].dataValues.cantidad
+            descripcion = prod[i].dataValues.producto_lente.dataValues.nombre;
+            price = prod[i].dataValues.producto_lente.dataValues.producto_lentes_precio.dataValues.precio_venta;
+            sub = quantity * price;
+            prod_pedido[i] = {
+                cantidad: quantity,
+                descripcion: descripcion,
+                precio: price,
+                subtotal: sub
+            }
+        }
+
+        console.log(prod_pedido);
+
+    
+
 
 
         //Crea la estructura del documento
@@ -132,9 +170,8 @@ const crearFactura = async (req, res) => {
 
         const productos = [
             {
-                descripcion: "Lentes",
-                unidades: 2,
                 cantidad: 1,
+                descripcion: "Lentes",
                 precio: 24.55,
                 subtotal: 355
             }
@@ -142,12 +179,11 @@ const crearFactura = async (req, res) => {
         // Detalles de la factura
         doc.addTable(
             [
-                { key: 'descripcion', label: 'Descripción', align: 'left' },
-                { key: 'unidades', label: 'Unidades', align: 'center' },
                 { key: 'cantidad', label: 'Cantidad', align: 'center' },
+                { key: 'descripcion', label: 'Descripción', align: 'left' },
                 { key: 'precio', label: 'Precio', align: 'center' },
                 { key: 'subtotal', label: 'Subtotal', align: 'center' }
-            ], productos, {
+            ], prod_pedido, {
             border: null,
             width: "fill_body",
             striped: true,
