@@ -3,33 +3,32 @@ import PdfkitConstruct from 'pdfkit-construct';
 import fs from 'fs';
 import fecha_actual from '../helpers/fecha_actual.js';
 import { generateIdFactura } from '../helpers/tokens.js';
-import {Pago, Pedido, Usuario, Direccion, Prod_pedido, Producto, Precio} from '../models/asosiations.js'
+import { Pago, Pedido, Usuario, Direccion, Prod_pedido, Producto, Precio } from '../models/asosiations.js'
 
 
 const crearFactura = async (req, res) => {
     try {
-        const {id_pedido} = req.params;
+        const { id_pedido } = req.params;
 
         //Informacion del cliente
         const cliente = await Pedido.findOne({
             include: [{
                 model: Usuario,
                 attributes: ['nombre', 'apellido_paterno', 'apellido_materno', 'telefono', 'email']
-                },
-                {
-                    model: Direccion,
-                    attributes: ['direccion']
-                }],
+            },
+            {
+                model: Direccion,
+                attributes: ['direccion']
+            }],
             attributes: ['fecha_pedido'],
-            where: {id_pedido}
+            where: { id_pedido }
         })
 
         //Desestructurando el usuario
-        const {nombre, apellido_paterno, apellido_materno, telefono, email} = cliente.usuario.dataValues;
+        const { nombre, apellido_paterno, apellido_materno, telefono, email } = cliente.usuario.dataValues;
 
         //Desestructurando la direccion
-        const {direccion} = cliente.usuario_direccion.dataValues
-
+        const { direccion } = cliente.usuario_direccion.dataValues
 
         //Buscar productos con el id del pedido        
         const prod = await Prod_pedido.findAll({
@@ -43,15 +42,20 @@ const crearFactura = async (req, res) => {
 
             },
             attributes: ['cantidad'],
-            where: {id_pedido}
+            where: { id_pedido }
         })
+
+        //Definir las variables del objeto
         let prod_pedido = []
         let quantity = 0;
         let descripcion;
         let price = 0;
         let sub = 0;
 
-        for(let i = 0; i < prod.length; i++){
+        let total = 0;
+
+        //Crear el arreglo de objetos de acuerdo con los productos del pedido
+        for (let i = 0; i < prod.length; i++) {
             quantity = prod[i].dataValues.cantidad
             descripcion = prod[i].dataValues.producto_lente.dataValues.nombre;
             price = prod[i].dataValues.producto_lente.dataValues.producto_lentes_precio.dataValues.precio_venta;
@@ -62,13 +66,8 @@ const crearFactura = async (req, res) => {
                 precio: price,
                 subtotal: sub
             }
+            total = total + sub;
         }
-
-        console.log(prod_pedido);
-
-    
-
-
 
         //Crea la estructura del documento
         const doc = new PdfkitConstruct({
@@ -78,6 +77,7 @@ const crearFactura = async (req, res) => {
         //Funcion de fecha
         const fecha = fecha_actual.toISOString().split('T')[0];
 
+        //Inicia la descarga a la hora de dar click
         const stream = res.writeHead(200, {     //Definiendo la descarga del pdf con un estado 200 en lugar de .status(200)
             "Content-Type": "application/pdf",
             "Content-Disposition": "attachment; filename=factura.pdf"
@@ -89,6 +89,9 @@ const crearFactura = async (req, res) => {
         const imagePath = 'backend/public/logo.png'; // Especifica la ruta de tu imagen aquí
         const image = fs.readFileSync(imagePath);
 
+        const firmaPath = 'backend/public/firma.png'; // Especifica la ruta de tu imagen aquí
+        const firma = fs.readFileSync(firmaPath);
+
 
         // Colocar la imagen en la esquina superior izquierda
         doc.image(image, {
@@ -97,6 +100,27 @@ const crearFactura = async (req, res) => {
             width: 170, // Ancho de la imagen
             height: 110 // Altura de la imagen
         });
+
+        // Función para obtener las coordenadas de la esquina inferior derecha
+        function coordenadasEsquinaInferiorDerecha(anchoImagen, altoImagen) {
+            const margenDerecho = 50; // Margen derecho deseado
+            const margenSuperior  = 50; // Margen inferior deseado
+            const coordenadaX = doc.page.width - anchoImagen - margenDerecho;
+            const coordenadaY = doc.page.width - anchoImagen - margenSuperior + 200;
+            return { x: coordenadaX, y: coordenadaY };
+        }
+
+        // Llama a la función para obtener las coordenadas
+        const coordenadas = coordenadasEsquinaInferiorDerecha(170, 110);
+
+        // Coloca la imagen en la esquina inferior derecha
+        doc.image(firma, {
+            x: coordenadas.x,
+            y: coordenadas.y,
+            width: 100,
+            height: 60
+        });
+
         // set the header to render in every page
         doc.setDocumentHeader({
             height: '35'
@@ -158,6 +182,50 @@ const crearFactura = async (req, res) => {
             height: '15'
         }, () => {
 
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+            doc.moveDown();
+
+
+            doc.fontSize(15)
+                .text(`Subtotal: ${total}`, {
+                    width: 420,
+                    align: 'right'
+                })
+
+            doc.fontSize(15)
+                .text(`Total: ${total}`, {
+                    width: 420,
+                    align: 'right'
+                })
+
+            // Información del Pago
+            doc.fontSize(15)
+                .text('Información del pago', {
+                    width: 420,
+                    align: 'left'
+                })
+
+            // Mover hacia abajo para crear espacio entre los bloques de texto
+            doc.moveDown();
+
+            doc.fontSize(12)
+                .text(`Método de pago: Tarjeta de débito`, {
+                    width: 420,
+                    align: 'left'
+                })
+                .text(`Fecha de pago: ${cliente.fecha_pedido}`, {
+                    width: 420,
+                    align: 'left'
+                })
+
+
+
             // Información del vendedor
             doc.fontSize(10)
                 .text('Tlahuelilpan Centro, 123        |        Contacto: 123-456-7890        |        ventas@starglasses.com', doc.footer.x + 70, doc.footer.y + 15, {
@@ -180,7 +248,7 @@ const crearFactura = async (req, res) => {
         doc.addTable(
             [
                 { key: 'cantidad', label: 'Cantidad', align: 'center' },
-                { key: 'descripcion', label: 'Descripción', align: 'left' },
+                { key: 'descripcion', label: 'Producto', align: 'left' },
                 { key: 'precio', label: 'Precio', align: 'center' },
                 { key: 'subtotal', label: 'Subtotal', align: 'center' }
             ], prod_pedido, {
