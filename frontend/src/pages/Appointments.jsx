@@ -1,5 +1,7 @@
 import { Paper, Box} from '@mui/material'
 import AppointmentForm from '../components/appointment/AppointmentForm';
+import UserRequestedAppointments from '../components/appointment/UserRequestedAppointments';
+import UpcomingAppointments from '../components/appointment/UpcomingAppointments';
 
 
 export const Appointments = () => {
@@ -11,8 +13,13 @@ export const Appointments = () => {
       margin: { sm: "20px 30px", xs: "12px 18px" },
     }}
   >
-    <Box>
+    <Box sx={{padding:'12px'}}>
       <AppointmentForm/>
+    </Box>
+    <Box>
+      <UserRequestedAppointments/>
+      <UpcomingAppointments/>
+      
     </Box>
   </Paper>
   )

@@ -1,4 +1,4 @@
-import { Button, Container, TextField, Typography } from "@mui/material";
+import { Button, Container, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 import { useForm } from "react-hook-form";
@@ -28,11 +28,11 @@ export default function AppointmentForm() {
     console.log(cita);
   };
   return (
-    <Container>
-      <Typography>Solicite una cita</Typography>
+    <Paper sx={{maxWith:'420px', width:'360px', padding:'8px'}}>
+      <Typography sx={{margin:'12px 18px'}}>Solicite una cita</Typography>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        style={{ display: "flex", flexDirection: "column" }}
+        style={{ display: "flex", flexDirection: "column", gap:'26px'}}
       >
         <TextField
           {...register("fecha_hora")}
@@ -66,6 +66,7 @@ export default function AppointmentForm() {
           InputLabelProps={{ shrink: true }}
           helperText={errors.antecedentes?.message}
           error={!!errors.antecedentes}
+          multiline
         />
         <Button
           variant="contained"
@@ -76,6 +77,6 @@ export default function AppointmentForm() {
           Solicitar
         </Button>
       </form>
-    </Container>
+    </Paper>
   );
 }
