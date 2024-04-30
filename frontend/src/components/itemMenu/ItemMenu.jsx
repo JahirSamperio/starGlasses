@@ -26,7 +26,7 @@ export const ItemMenu = () => {
   };
 
   return (
-    <Container>
+    <>
       {/*Menu de apertura */}
       <IconButton
         color="secondary"
@@ -66,6 +66,6 @@ export const ItemMenu = () => {
           <ListItemText>Cerrar sesion</ListItemText>
         </MenuItem>
       </Menu>
-    </Container>
+    </>
   );
 };
