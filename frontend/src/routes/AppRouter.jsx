@@ -13,6 +13,7 @@ import { RetrivePasswordConfirm } from "../pages/RetrivePasswordConfirm";
 import { Account } from "../pages/Account/Account";
 
 import DashboardRoutes from "./DashboardRoutes";
+import { EmailVerification } from "../pages/EmailVerification";
 
 
 const navArrayLinks = [
@@ -43,7 +44,8 @@ function App() {
             <Route path="/product/:id_producto" element={<ProductDetails/>}/>
             <Route path= "/password-restore" element={<RetrivePassword/>}/>
             <Route path="/password-restore/confirmed" element={<RetrivePasswordConfirm/>}/>
-            
+            <Route path="/email-verification-alert" element={<EmailVerification/>}/>
+
             {/* Rutas de la dashboard*/}
             <Route path="/dashboard/*" element={<DashboardRoutes/>}/>
 

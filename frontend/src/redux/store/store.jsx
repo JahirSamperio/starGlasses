@@ -6,7 +6,7 @@ import { ProductReducer } from "../slices/products/productsIndex";
 import {AppointmentReducers} from '../slices/appointments/indexAppointments';
 import {OrdersReducers} from '../slices/orders/indexOrders';
 import { SalesReducer } from "../slices/sales/salesIndex";
-
+import { PaymentsReducer } from "../slices/payments/indexPayments";
 
 const combineReducer = combineReducers({
     users: UsersReducer,
@@ -14,7 +14,8 @@ const combineReducer = combineReducers({
     products:ProductReducer,
     orders:OrdersReducers,
     appointments:AppointmentReducers,
-    sales:SalesReducer
+    sales:SalesReducer,
+    payments:PaymentsReducer
 });
 
 const rootReducer = (state, action) =>{

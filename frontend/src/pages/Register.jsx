@@ -13,23 +13,20 @@ import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import { NavLink } from "react-router-dom";
 
 import { useForm } from "react-hook-form";
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 import { newUserSchema } from "../../validations/newUserSchema";
-import { registerUser } from '../redux/actions/users/registerUser';
-
+import { registerUser } from "../redux/actions/users/registerUser";
 
 export default function Register() {
-  
-  const {loading, success, error, userData} = useSelector((state) => state.users.new)
+  const { loading, success, error, userData } = useSelector(
+    (state) => state.users.new
+  );
   const dispacth = useDispatch();
-
-
+  const navigate = useNavigate();
 
   const {
     register,
@@ -39,9 +36,15 @@ export default function Register() {
     resolver: yupResolver(newUserSchema),
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
-    dispacth(registerUser(data));    
+    dispacth(registerUser(data)).then(() => {
+      if(success){
+        navigate('email-verification-alert');
+      }
+    }).catch(error =>{
+      console.log('error: ', error);
+    });
   };
 
   return (
@@ -104,7 +107,6 @@ export default function Register() {
             variant="outlined"
             helperText={errors.lastNameM?.message}
             error={!!errors.lastNameM}
-
           />
         </Box>
         {/* <DatePicker
@@ -126,7 +128,6 @@ export default function Register() {
           fullWidth
           helperText={errors.phone?.message}
           error={!!errors.phone}
-
         />
         <TextField
           {...register("email")}
@@ -154,7 +155,6 @@ export default function Register() {
             required
             helperText={errors.password?.message}
             error={!!errors.password}
-
           />
           <TextField
             {...register("confirmPassword")}
@@ -169,7 +169,6 @@ export default function Register() {
             required
             helperText={errors.confirmPassword?.message}
             error={!!errors.confirmPassword}
-
           />
         </Box>
 

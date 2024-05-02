@@ -18,6 +18,8 @@ export const registerUser = (dataForm) => async (dispatch) =>
         dispatch(fetchRegisterUserSuccess(data.response));
 
     }catch (error){
-        dispatch(fetchRegisterUserFailure());
+        console.error('Error al registrar usuario:', error);
+        dispatch(fetchRegisterUserFailure(error.message));
+        throw error; 
     }
 }
