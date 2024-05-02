@@ -22,9 +22,6 @@ function ProductDetails({}) {
     dispatch(getProductDetailsAction(id_producto));
   }, []);
 
-  useEffect(() => {
-    console.log(productDetailsData);
-  }, [productDetailsData]);
 
   //  const {
   //    id_lentes,
@@ -78,7 +75,7 @@ function ProductDetails({}) {
           <Carrousel />
         </Container>
         <ProductDescription
-          nombre={nombre}
+          nombre={nombre} 
           descripcion={descripcion}
           precio_venta={
             producto_lentes_precio ? producto_lentes_precio.precio_venta : ""

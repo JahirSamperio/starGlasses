@@ -55,6 +55,7 @@ const autenticar = async (req = request, res = response) => {
         }).redirect('/homepage')
 
     } catch (err) {
+        console.log(err)
         res.status(500).json({
             error: 'Ocurrió un error al intentar autenticar'
         });
@@ -122,6 +123,7 @@ const registerController = async (req, res) => {
         });
 
     } catch (err) {
+        console.log(err);
         res.status(500).json({
             error: 'Ocurrió un error al procesar la solicitud'
         });

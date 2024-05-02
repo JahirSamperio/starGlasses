@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box,Paper, } from '@mui/material';
+import { Box,Container,Paper, } from '@mui/material';
 import { DashboardNavBar } from '../../components/DASHBOARD-COMPONENTS/dashboard-navbar/DashboardNavBar';
 import { OrdersList } from '../../components/DASHBOARD-COMPONENTS/dashboardOrders/OrdersList';
 
@@ -75,13 +75,15 @@ export const Orders = () => {
             <Paper
               elevation={7}
               sx={{
-                width: { lg: "1600px", md: "1380px", sm: "820px", xs: "100%" }, // Agregado xs: '100%'
+                width: { lg: "1600px", md: "1380px", sm: "820px", xs: "100%" }, 
                 height: 'fit-content',
                 padding: "12px 18px 12px 18px",
                 maxWidth:'1600px'
               }}
             >
+
               <OrdersList pedidos={pedidosData}/>
+              <Container></Container>
             </Paper>
           </Box>
         </Paper>
