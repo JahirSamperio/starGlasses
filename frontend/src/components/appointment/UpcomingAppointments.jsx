@@ -24,7 +24,7 @@ export default function UpcomingAppointments() {
   return (
     <TableContainer component={Paper} sx={{ width: { lg: "28%" }, height:{md:'340px'} }}>
       <Typography sx={{ mt: "4px", ml: "8px", }} variant="h6" >
-        Todas sus citas 
+         Próximas citas 
       </Typography>
       <Table sx={{ minWidth: 500 }} aria-label="simple table">
         <TableHead>

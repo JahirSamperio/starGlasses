@@ -31,6 +31,7 @@ export const Payments = () => {
                 maxWidth:'1600px'
               }}
             >
+            
               
             </Paper>
           </Box>

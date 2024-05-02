@@ -40,7 +40,7 @@ function App() {
             <Route path="/products-list" element={<Products />} />
             <Route path="/shopping-cart" element={<ShoppingCart />} />
             <Route path="/appointments" element={<Appointments/>}/>
-            <Route path="/product/:id" element={<ProductDetails/>}/>
+            <Route path="/product/:id_producto" element={<ProductDetails/>}/>
             <Route path= "/password-restore" element={<RetrivePassword/>}/>
             <Route path="/password-restore/confirmed" element={<RetrivePasswordConfirm/>}/>
             

@@ -13,9 +13,9 @@ import {
 import { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 
-export default function ProductCard({ product, onProductClick }) {
+export default function ProductCard({ id_lentes, nombre, precio,imagen, onProductClick }) {
 
-  const {name, imageUrl, description, id, price} = product || {};
+
 
 
   // props for shoppingCart = id, name, price
@@ -72,21 +72,21 @@ export default function ProductCard({ product, onProductClick }) {
         },
         width: { lg: 250, sm: 220, xs: 300 },
       }}
-      onClick={() => onProductClick(product)}
+      onClick={() => onProductClick(id_lentes)}
     >
       <CardActionArea onClick={() => {}}>
         <CardMedia
           component="img"
-          image="https://via.placeholder.com/200"
+          image={imagen}
           height={{ lg: 200 }}
-          alt={name}
+          alt={nombre}
           sx={{ padding: "8px 6px" }}
         />
         <CardContent>
           <Typography component="p" variant="body2">
-            {name}
+            {nombre}
           </Typography>
-          <Typography sx={{ mt: "5px" }}>${price}</Typography>
+          <Typography sx={{ mt: "5px" }}>${precio}</Typography>
         </CardContent>
       </CardActionArea>
 
@@ -96,7 +96,7 @@ export default function ProductCard({ product, onProductClick }) {
           sx={{ fontSize: "12px", flexGrow: 1 }}
           onClick={(e) => {
             // e.preventDefault();
-            // handleProductsToShoppingCart(id, name, price);
+           // handleProductsToShoppingCart(id, name, price);
           }}
         >
           Ver mas
