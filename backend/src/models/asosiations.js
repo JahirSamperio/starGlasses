@@ -7,6 +7,7 @@ import Envio from './Envio.js';
 import Direccion from './Direccion.js';
 import Pago from './Pago.js';
 import Cita from './Cita.js';
+import Carrito from './Carrito.js'
 
 //Productos
 Producto.belongsTo(Precio, {foreignKey: 'id_precio'});
@@ -47,6 +48,11 @@ Cita.belongsTo(Usuario, {foreignKey: 'id_usuario'})
 
 Usuario.hasMany(Cita, {foreignKey: 'id_usuario'})
 
+//Carrito de compras
+Carrito.belongsTo(Usuario, {foreignKey: 'id_usuario'})
+
+Carrito.belongsTo(Producto, {foreignKey: 'id_producto'})
+
 
 export {
     Producto,
@@ -57,5 +63,6 @@ export {
     Envio,
     Direccion,
     Pago,
-    Cita
+    Cita,
+    Carrito
 }

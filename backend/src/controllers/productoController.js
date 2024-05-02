@@ -13,7 +13,7 @@ import uploadCloudinary from '../uploads/uploads.js';
 cloudinary.config(process.env.CLOUDINARY_URL);
 
 const newProduct =  async (req = request, res = response) => {
-    console.log(req.body);
+    console.log(req.files);
 
     try {
         //Validacion del formulario
@@ -43,12 +43,16 @@ const newProduct =  async (req = request, res = response) => {
         //Cargar imagen a cloudinary y extraer url
         const secure_url = await uploadCloudinary(req);
         req.body.imagen = secure_url;
+
+        const imagenUno = secure_url.split(',')[0];
+        console.log(imagenUno);
+        console.log(secure_url);
         
         //Creando el producto y precio en Stripe
         const product = await stripeCliente.products.create({
             name: nombre,
             description: descripcion,
-            images: [secure_url]
+            images: [imagenUno]
         });
 
 

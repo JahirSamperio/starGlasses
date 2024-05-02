@@ -9,6 +9,7 @@ import ventasRouter from './ventas.js'
 import pedidoRouter from './pedido.js'
 import pagosRouter from './pagos.js'
 import facturaRouter from './factura.js'
+import usuarioRouter from './usuario.js'
 
 const app = express();
 
@@ -33,5 +34,7 @@ app.use('/pedido', pedidoRouter);
 app.use('/pagos', pagosRouter);
 
 app.use('/factura', facturaRouter);
+
+app.use('/usuario', usuarioRouter);
 
 export default app;
