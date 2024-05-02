@@ -1,20 +1,12 @@
 import axios from "axios";
+import { fetchGetProductListFailure, fetchGetProductList, fetchGetProductListSuccess } from '../../slices/products/getProductsListSlice';
 
-import {fetchGetProductList,fetchGetProductListFailure,fetchGetProductListSuccess} from '../../slices/products/getProductsListSlice';
-
-
-export const getProductListAction = () => async (dispatch) =>{
-    try{
-
+export const getProductListAction = () => async (dispatch) => {
+    try {
         dispatch(fetchGetProductList());
-        const {data} = await axios.get('http://localhost:8080/producto/allProducts/');
-n
-        dispatch(fetchGetProductListSuccess(data.response));
-
-    }catch(error){
-
-        dispatch(fetchGetProductListFailure("Error al obtener la lista des productos"));
-        
+        const { data } = await axios.get('http://localhost:8080/producto/allProducts/');
+        dispatch(fetchGetProductListSuccess(data.productos));
+    } catch (error) {
+        dispatch(fetchGetProductListFailure("Error al obtener la lista de productos"));
     }
 }
-

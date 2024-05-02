@@ -7,6 +7,6 @@ export * from './getProductsListSlice';
 export * from './getProductDetailsSlice'
 
 export const ProductReducer = combineReducers({
-    get: GetProductListSlice.reducer,
+    getAll: GetProductListSlice.reducer,
     getById: GetProductDetailsSlice.reducer,
 })

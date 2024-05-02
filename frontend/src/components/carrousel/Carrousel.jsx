@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "@mui/material";
 
-export const Carrousel = () => {
+export const Carrousel = ({imagenes}) => {
   return (
     <Container
       sx={{

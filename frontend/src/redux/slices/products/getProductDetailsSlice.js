@@ -20,7 +20,7 @@ export const GetProductDetailsSlice = createSlice({
             state.loading = false;
             state.error = false;
             state.success = true;
-            state.productListData = action.payload;
+            state.productDetailsData = action.payload;
         },
         fetchGetProductDetailsFailure: (state, action) => {
             state.error = action.payload;
