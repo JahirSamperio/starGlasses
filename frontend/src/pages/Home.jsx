@@ -1,33 +1,35 @@
-import { Box, Card, Container, Icon, Paper, Typography } from "@mui/material";
+import { Box, Card, Container, Icon, Paper, Typography, Grid} from "@mui/material";
 import LandingPaper from "../components/LandingPaper/LandingPaper";
 import ProductCard from "../components/productCard/ProductCard";
 import { Footer } from "../components/footer/Footer";
 import NavBar from "../components/navBar/NavBar";
+
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { getNewestProductsListAction } from "../redux/actions/products/newestProducts";
+import { useEffect } from "react";
 // import {}from '../../public/img'
 
-
-const navArrayLinks = [
-  {
-    title: "Inicio",
-    path: "/",
-    icon: null,
-  },
-  {
-    title: "Productos",
-    path: "/products-list",
-    icon: null,
-  },
-  {
-    title: "citas",
-    path: "/appointments",
-    icon: null,
-  },
-];
-
 export default function Home() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { loading, error, success, newestProductsListData } = useSelector(
+    (state) => state.products.getNewest
+  );
+
+  useEffect(() => {
+    dispatch(getNewestProductsListAction());
+  }, []);
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <>
-      <NavBar navArrayLinks={navArrayLinks}/>
+      <NavBar />
       <Paper
         elevation={10}
         sx={{
@@ -91,10 +93,27 @@ export default function Home() {
                 textAlign: "center",
               }}
             >
-              <ProductCard sx={{ mb: "20px" }} />
-              <ProductCard sx={{ mb: "20px" }} />
-              <ProductCard sx={{ mb: "20px" }} />
-              <ProductCard sx={{ mb: "20px" }} />
+              <Grid container spacing={2}>
+                {success &&
+                  Array.isArray(newestProductsListData) && // Verificar si newestProductsListData es un array
+                  newestProductsListData.slice(0, 10).map((product, index) => (
+                    <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
+                      <div
+                        style={{ display: "flex", justifyContent: "center" }}
+                      >
+                        <ProductCard
+                          imagen={product.imagen.split(",")[0].trim()} // Obtener la primera imagen de cada producto
+                          nombre={product.nombre}
+                          id_lentes={product.id_lentes}
+                          precio={product.producto_lentes_precio.precio_venta}
+                          onProductClick={() =>
+                            handleProductClick(product.id_lentes)
+                          }
+                        />
+                      </div>
+                    </Grid>
+                  ))}
+              </Grid>
             </Box>
           </Box>
         </Container>

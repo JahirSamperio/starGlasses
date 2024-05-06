@@ -42,10 +42,13 @@ export default function Login() {
     
   }
 
+    useEffect(()=>{console.log(loginData);},[loginData])
   useEffect(() => {
     if(success === true) {
-      setItem("USERID", loginData);
+      setItem("USERID", loginData.userId);
+      setItem("privilegio",loginData.userPrivilegio);
       navigate('/')
+      console.log('ld',loginData);
     }
   }, [loginData])
 

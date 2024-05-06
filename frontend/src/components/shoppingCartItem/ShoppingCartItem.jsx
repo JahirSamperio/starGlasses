@@ -11,7 +11,7 @@ import {
 import React from "react";
 
 
-export default function ShoppingCartItem({id,name, price, handleRemoveFromCart}) {
+export default function ShoppingCartItem({id,nombre, price, handleRemoveFromCart}) {
 
 
 

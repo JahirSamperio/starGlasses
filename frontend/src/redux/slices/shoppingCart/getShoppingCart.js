@@ -4,7 +4,7 @@ const initialState = {
     loading:false,
     error:null,
     success:false,
-    shoppingCartData: {}
+    shoppingCartData: []
 }
 
 export const GetShoppingCartSlice = createSlice({

@@ -48,10 +48,12 @@ const autenticar = async (req = request, res = response) => {
 
         //Autenticar usuario
         const userId = usuario.id_usuario;
+        const userPrivilegio = usuario.privilegio;
 
         //Almacenar en un cookie
         return res.status(200).json({
-            userId
+            userId,
+            userPrivilegio
         })
 
     } catch (err) {

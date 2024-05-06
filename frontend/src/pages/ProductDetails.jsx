@@ -1,12 +1,10 @@
-
 import Paper from "@mui/material/Paper";
-import { Container, Typography, IconButton } from "@mui/material/";
+import { Container } from "@mui/material/";
 import { Carrousel } from "../components/carrousel/Carrousel";
 import NavBar from "../components/navBar/NavBar";
 
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useSnackbar } from "notistack";
 import React, { useEffect, useState } from "react";
 
 import { getProductDetailsAction } from "../redux/actions/products/getProductDetails";
@@ -24,30 +22,22 @@ function ProductDetails({}) {
     productDetailsData = {},
   } = useSelector((state) => state.products.getById || {});
 
+  const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
+
   useEffect(() => {
     dispatch(getProductDetailsAction(id_producto));
-  }, []);
+  }, [id_producto]); // Asegúrate de que el efecto se ejecute cada vez que cambie id_producto
 
-  //  const {
-  //    id_lentes,
-  //    nombre,
-  //    tipo,
-  //    marca,
-  //    material,
-  //    color,
-  //    graduacion,
-  //    tamano,
-  //    existencia,
-  //    proveedor,
-  //    descripcion,
-  //    imagen,
-  //    id_precio,
-  //    createdAt,
-  //    updatedAt,
-  //    producto_lentes_precio: { precio_venta, oferta, fecha_fin_oferta },
-  //  } = productDetailsData;
+  const enlaces = productDetailsData?.imagen?.split(',')?.filter(enlace => enlace.trim() !== '') ?? [];
 
-  const { id_lentes, nombre, tipo, descripcion, producto_lentes_precio } =
+  // Establecer la primera imagen como la imagen predeterminada al inicializar el estado
+  useEffect(() => {
+    if (enlaces.length > 0) {
+      setImagenSeleccionada(enlaces[0]);
+    }
+  }, [productDetailsData]); // Asegúrate de que el efecto se ejecute cada vez que cambie el conjunto de enlaces
+
+  const { id_lentes, nombre, tipo, descripcion, producto_lentes_precio, links } =
     productDetailsData || {};
 
   return (
@@ -78,17 +68,20 @@ function ProductDetails({}) {
                 bgcolor: "black",
                 borderRadius: "6px",
                 margin: "24px 24px auto auto",
+                overflow: "hidden",
+                position: "relative",
               }}
-            ></Container>
-            <Carrousel />
+            >
+              {imagenSeleccionada && <img src={imagenSeleccionada} alt='Imagen seleccionada' style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", top: 0, left: 0 }} />}
+            </Container>
+            <Carrousel  imagenes={enlaces} setImagenSeleccionada={setImagenSeleccionada}/>
           </Container>
           <ProductDescription
             nombre={nombre}
             descripcion={descripcion}
-            precio_venta={
-              producto_lentes_precio ? producto_lentes_precio.precio_venta : ""
-            }
+            precio_venta={producto_lentes_precio ? producto_lentes_precio.precio_venta : ""}
             oferta={producto_lentes_precio ? producto_lentes_precio.oferta : ""}
+            id_lentes={id_lentes}
           />
         </Container>
       </Paper>

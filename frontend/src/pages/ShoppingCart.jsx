@@ -2,29 +2,37 @@ import { useEffect, useState } from "react";
 import { Container, Paper, Box, Typography, Button } from "@mui/material";
 import { EmptyShoppingCart } from "../components/emptyShoppingCart/EmptyShoppingCart";
 import ShoppingCartItem from "../components/shoppingCartItem/ShoppingCartItem";
-import NavBar from "../components/navBar/NavBar";
-
-import { navArrayLinks } from "../helpers/navArrayLinks";
+import { useDispatch, useSelector } from "react-redux";
+import { getShoppingCartAction } from "../redux/actions/shoppingCart/getShoppingCart";
+import { getItem } from "../helpers/localStorage/getItem";
 
 export const ShoppingCart = () => {
+  const dispatch = useDispatch();
+
+  const { loading, success, error, shoppingCartData } = useSelector(
+    (state) => state.shoppingcart.get
+  );
+  const [userID, setUserID] = useState(null);
+
+  useEffect(() => {
+    const loadUserID = async () => {
+      const id_usuario = await getItem("USERID");
+      setUserID(id_usuario);
+    };
+
+    loadUserID();
+  }, []);
+
+  useEffect(() => {
+    if (userID) {
+      console.log(userID);
+      dispatch(getShoppingCartAction(userID));
+    }
+  }, [userID]);
+
   const [list, setList] = useState([]);
   const [empty, setEmpty] = useState(true); // Initially established as true
 
-  useEffect(() => {
-    // Obtener el carrito de la compra del localStorage
-    const shoppingList = JSON.parse(localStorage.getItem("shopping_cart"));
-
-    if (Array.isArray(shoppingList) && shoppingList.length > 0) {
-      // if there are items in the cart, setEmpty is non-empty
-      setList(shoppingList);
-      setEmpty(false);
-    } else {
-      // if cart is empty or there are no items, it sets on Empty
-      setEmpty(true);
-    }
-  }, []); // this effect will execute once when rendering the component
-
-  console.log(list);
   // Maneja la eliminación de un elemento del carrito
   const handleRemoveItem = (id) => {
     console.log("ID a eliminar:", id);
@@ -55,66 +63,77 @@ export const ShoppingCart = () => {
   let finalPrice = productSum + deliveryFee;
 
   return (
-    <>
-      <NavBar navArrayLinks={navArrayLinks} />
-      <Container
-        sx={{
-          display: { md: "flex" },
-          justifyContent: "space-around",
-          mt: "24px",
-          mb: "4em",
-          minWidth: "maxContent",
-        }}
-      >
-        <Paper sx={{ height: { md: "460px" }, mr: "12px" }} elevation={10}>
-          <Typography
-            variant="h5"
-            sx={{ mt: "8px", ml: "12px", fontWeight: 500 }}
-          >
-            Productos en el carrito
-          </Typography>
-          <Box
-            sx={{
-              height: { md: "400px" },
-              width: "810px",
-              padding: "10px 12px",
-              overflowY: "auto",
-            }}
-          >
-            {empty ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-              >
-                <EmptyShoppingCart />
-              </Box>
-            ) : (
-              list.map((item, index) => (
-                <ShoppingCartItem
-                  name={item.name}
-                  price={item.price}
-                  key={index}
-                  handleRemoveFromCart={() => handleRemoveItem(item.id)}
-                />
-              ))
-            )}
-          </Box>
-        </Paper>
-        <Paper elevation={10}>
-          <Box sx={{ height: "380px", width: "410px" }}>
-            <Container>
-              <Typography
-                variant="h5"
-                sx={{ mt: "8px", ml: "12px", fontWeight: 500 }}
-              >
-                Resumen de la compra:
+    <Container
+      sx={{
+        display: { md: "flex" },
+        justifyContent: "space-around",
+        mt: "24px",
+        mb: "4em",
+        minWidth: "maxContent",
+      }}
+    >
+      <Paper sx={{ height: { md: "460px" }, mr: "12px" }} elevation={10}>
+        <Typography
+          variant="h5"
+          sx={{ mt: "8px", ml: "12px", fontWeight: 500 }}
+        >
+          Productos en el carrito
+        </Typography>
+        <Box
+          sx={{
+            height: { md: "400px" },
+            width: "810px",
+            padding: "10px 12px",
+            overflowY: "auto",
+          }}
+        >
+          {empty ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%",
+              }}
+            >
+              <EmptyShoppingCart />
+            </Box>
+          ) : (
+            shoppingCartData.map((item, index) => (
+              <ShoppingCartItem
+                name={item.producto_lente.nombre}
+                price={item.producto_lente.producto_lentes_precio.precio_venta}
+                key={index}
+                handleRemoveFromCart={() => handleRemoveItem(item.id_cart)}
+              />
+            ))
+          )}
+        </Box>
+      </Paper>
+      <Paper elevation={10}>
+        <Box sx={{ height: "380px", width: "410px" }}>
+          <Container>
+            <Typography
+              variant="h5"
+              sx={{ mt: "8px", ml: "12px", fontWeight: 500 }}
+            >
+              Resumen de la compra:
+            </Typography>
+          </Container>
+          {empty ? (
+            <Container
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px 16px",
+              }}
+            >
+              <Typography sx={{ ml: "12px", mt: "8px" }}>
+                Aqui va el resumen de tu compra
               </Typography>
             </Container>
-            {empty ? (
+          ) : (
+            <Container sx={{ mt: "8px" }}>
               <Container
                 sx={{
                   display: "flex",
@@ -122,53 +141,39 @@ export const ShoppingCart = () => {
                   padding: "10px 16px",
                 }}
               >
-                <Typography sx={{ ml: "12px", mt: "8px" }}>
-                  Aqui va el resumen de tu compra
-                </Typography>
+                <Typography>{`Producto(s):`}</Typography>
+                <Typography>{productSum}</Typography>
               </Container>
-            ) : (
-              <Container sx={{ mt: "8px" }}>
-                <Container
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "10px 16px",
-                  }}
-                >
-                  <Typography>{`Producto(s):`}</Typography>
-                  <Typography>{productSum}</Typography>
-                </Container>
-                <Container
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "10px 16px",
-                  }}
-                >
-                  <Typography>Envio: </Typography>
-                  <Typography>{deliveryFee}</Typography>
-                </Container>
-                <Container
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "10px 16px",
-                  }}
-                >
-                  <Typography>Total:</Typography>
-                  <Typography>{finalPrice}</Typography>
-                </Container>
-                <Button
-                  variant="contained"
-                  sx={{ flexGrow: 1, width: "100%", mt: "12px" }}
-                >
-                  Comprar
-                </Button>
+              <Container
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "10px 16px",
+                }}
+              >
+                <Typography>Envio: </Typography>
+                <Typography>{deliveryFee}</Typography>
               </Container>
-            )}
-          </Box>
-        </Paper>
-      </Container>
-    </>
+              <Container
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "10px 16px",
+                }}
+              >
+                <Typography>Total:</Typography>
+                <Typography>{finalPrice}</Typography>
+              </Container>
+              <Button
+                variant="contained"
+                sx={{ flexGrow: 1, width: "100%", mt: "12px" }}
+              >
+                Comprar
+              </Button>
+            </Container>
+          )}
+        </Box>
+      </Paper>
+    </Container>
   );
 };
