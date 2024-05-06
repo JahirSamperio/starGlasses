@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 import {
   Box,
   Button,
@@ -15,58 +17,55 @@ import { CheckBox } from "@mui/icons-material";
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import { NavLink } from "react-router-dom";
 
-import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useEffect } from "react";
 
-
-import {loginUser} from '../redux/actions/users/loginUser'
-
+import { loginUser } from '../redux/actions/users/loginUser'
+import { setItem } from '../helpers/localStorage/setItem';
+import { navArrayLinks } from '../helpers/navArrayLinks';
+import NavBar from '../components/navBar/NavBar';
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const {loginData, success, error} = useSelector((state) => state.users.login);
 
-  // const {loading, success, error, loginData} = useSelector((state => state.users.login));
+  const handleUserLogin = (event) => {
+    event.preventDefault(); // Evitar el envío automático del formulario
+    const loginFormData = {
+      email: event.target.email.value,
+      password: event.target.password.value
+    }
+    dispatch(loginUser(loginFormData));
+    
+  }
 
-  // const {nombre, apellidoPaterno,apellidoMaterno,password,id,telefono,email} = loginData ;
-
-  // useEffect(()=>{
-  //   console.log(loginData);
-  // },[loginData]);
-
-  // const handleUserLogin = (data)=>{
-  //   console.log(data);
-  //   const loginFormData = {
-  //     email: data.target.email.value,
-  //     password: data.target.password.value
-  //   }
-  //   dispatch(loginUser(loginFormData));
-  // }
-
-
-  // useEffect(()=>{
-  //   if(success == true){
-      
-  //   }
-  // },[success,loginData])
+  useEffect(() => {
+    if(success === true) {
+      setItem("USERID", loginData);
+      navigate('/')
+    }
+  }, [loginData])
 
 
-
+  
 
   return (
     <Grid>
+      <NavBar navArrayLinks={navArrayLinks}/>
       <Paper
         component="form"
         elevation={10}
         sx={{
           padding: 3,
-          minHeight:{sm:"520px"},
+          minHeight: { sm: "520px" },
           width: { xs: 300, sm: 360 },
           margin: "40px auto",
-          borderRadius:"12px",
+          borderRadius: "12px",
         }}
+        onSubmit={handleUserLogin} // Pasar la función sin ejecutarla
       >
         <Grid align="center">
           <Typography variant="h4" component="h4">
@@ -78,28 +77,24 @@ export default function Login() {
         </Grid>
         <TextField
           sx={{ mt: 2 }}
-          id="email"
+          name="email" // Añadir el atributo name
           label="E-mail"
           variant="outlined"
           type="email"
           fullWidth
           required
-          // helperText={error.msg}
-          // error={error.error}
-          // onChange={(e) => setEmail(e.target.value)}
-          // value={email}
         />
-         <TextField
+        <TextField
           sx={{ mt: 2 }}
-          id="password"
+          name="password" // Añadir el atributo name
           label="Contraseña"
           variant="outlined"
           type="password"
           fullWidth
           required
-        /> 
-        {/*checked={state.checkedB} onChange={handleChange}*/}
-        <FormControlLabel control={<CheckBox name='checkedB' color="primary"/>} sx={{paddingLeft:3,mt:1}} label="Recuerdáme"/>        <Button type="submit" variant="outlined" sx={{ margin:"12px 0"}} fullWidth>
+        />
+        <FormControlLabel control={<CheckBox name='checkedB' color="primary" />} sx={{ paddingLeft: 3, mt: 1 }} label="Recuerdáme" />
+        <Button type="submit" variant="outlined" sx={{ margin: "12px 0" }} fullWidth>
           Iniciar sesión
         </Button>
         <Link component={NavLink} to={"/password-restore"}>Reestablecer contraseña.</Link>

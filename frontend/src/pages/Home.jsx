@@ -2,11 +2,32 @@ import { Box, Card, Container, Icon, Paper, Typography } from "@mui/material";
 import LandingPaper from "../components/LandingPaper/LandingPaper";
 import ProductCard from "../components/productCard/ProductCard";
 import { Footer } from "../components/footer/Footer";
+import NavBar from "../components/navBar/NavBar";
 // import {}from '../../public/img'
+
+
+const navArrayLinks = [
+  {
+    title: "Inicio",
+    path: "/",
+    icon: null,
+  },
+  {
+    title: "Productos",
+    path: "/products-list",
+    icon: null,
+  },
+  {
+    title: "citas",
+    path: "/appointments",
+    icon: null,
+  },
+];
 
 export default function Home() {
   return (
     <>
+      <NavBar navArrayLinks={navArrayLinks}/>
       <Paper
         elevation={10}
         sx={{

@@ -7,20 +7,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Typography } from "@mui/material";
+import { useEffect } from "react";
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
 
-const rows = [
-  createData(159, 6.0, "Frozen yoghurt","Completado"),
-  createData(237, 9.0, "Ice cream sandwich","Completado"),
-  createData(262, 16.0, "Eclair","Completado"),
-  createData(305, 356, "Cupcake","Completado"),
-  createData(356, 16.0, "Gingerbread","Completado"),
-];
 
-export default function TodaySales() {
+export default function TodaySales({ventas}) {
+  
+
+  useEffect(()=>{console.log(ventas);},[ventas])
+
   return (
     <TableContainer component={Paper} sx={{ width: { lg: "38%" }, height:{md:'433px'} }}>
       <Typography sx={{ mt: "4px", ml: "8px", }} variant="h6" >
@@ -36,18 +31,16 @@ export default function TodaySales() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {ventas.map((venta) => (
             <TableRow
-              key={row.name}
+              key={venta.pedido.pedido_id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+
+              <TableCell align="right">{venta.pedido.id_pedido}</TableCell>
+              <TableCell align="right">{venta.monto}</TableCell>
+              <TableCell align="right">{`${venta.usuario.nombre} ${venta.usuario.apellido_paterno}`} </TableCell>
+              <TableCell align="right">{venta.estado}</TableCell>
             </TableRow>
           ))}
         </TableBody>

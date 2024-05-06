@@ -10,7 +10,7 @@ export const getPaymentDetailsAction = (id_pago) => async (dispatch) => {
   try {
     dispatch(fetchGetTransactionDetails());
     const { data } = await axios.get(
-        `http://localhost:8080/pagos/:${id_pago}`
+        `http://localhost:8080/pagos/${id_pago}`
     ); 
     
     dispatch(fetchGetTransactionDetailsSuccess(data.response));

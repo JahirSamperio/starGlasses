@@ -9,6 +9,7 @@ import {
   Paper,
   Modal,
   IconButton,
+  Box,
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
@@ -16,34 +17,32 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import { getPaymentDetailsAction } from "../../../redux/actions/payments/getPaymentDetails";
-export const TransactionsList = ({ transacciones }) => {
-  
-  const dispatch = useDispatch();
-  
 
-  const {loading, success, error, transactionDetailsData} =  useSelector((state)=> state.payments.getById);
+export const TransactionsList = ({ transacciones }) => {
+  const dispatch = useDispatch();
+
+  const { loading, success, error, transactionDetailsData } = useSelector(
+    (state) => state.payments.getById
+  );
 
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-
-
-
 
   const handleOpenModal = (transaccion) => {
     setSelectedTransaction(transaccion);
     console.log(transaccion.id_pago);
-    dispatch(getPaymentDetailsAction(transaccion.id_pago)); 
+    dispatch(getPaymentDetailsAction(transaccion.id_pago));
   };
 
-  useEffect(()=>{console.log(transactionDetailsData)} ,[transactionDetailsData])
+  useEffect(() => {
+    console.log(transactionDetailsData);
+  }, [transactionDetailsData]);
 
   const handleCloseModal = () => {
     setSelectedTransaction(null);
   };
 
-  
-
   return (
-    <Paper>
+    <Paper sx={{ padding:'12px 18px'}}>
       <Typography>Lista de transacciones</Typography>
       <Table>
         <TableHead>
@@ -65,16 +64,12 @@ export const TransactionsList = ({ transacciones }) => {
             <TableRow key={transaccion.id_pago}>
               <TableCell>{transaccion.id_pago}</TableCell>
               <TableCell>{transaccion.monto}</TableCell>
-              <TableCell>{transaccion.moneda}</TableCell>
               <TableCell>{transaccion.estado}</TableCell>
               <TableCell>{transaccion.usuario.nombre}</TableCell>
               <TableCell>{transaccion.usuario.apellido_paterno}</TableCell>
               <TableCell>{transaccion.usuario.apellido_materno}</TableCell>
               <TableCell>{transaccion.usuario.email}</TableCell>
-              <TableCell>{transaccion.usuario.telefono}</TableCell>
-              <TableCell>{transaccion.pedido.id_pedido}</TableCell>
               <TableCell>{transaccion.pedido.fecha_pedido}</TableCell>
-              <TableCell>{transaccion.pedido.estado}</TableCell>
               <TableCell>{transaccion.pedido.metodo_pago}</TableCell>
               <TableCell>
                 <IconButton onClick={() => handleOpenModal(transaccion)}>
@@ -86,10 +81,22 @@ export const TransactionsList = ({ transacciones }) => {
         </TableBody>
       </Table>
 
-      <Modal open={selectedTransaction !== null} onClose={handleCloseModal}>
-        <div>
+      <Modal
+        open={selectedTransaction !== null}
+        onClose={handleCloseModal}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center", 
+            alignItems: "center", 
+            height: "100%",
+            margin:'auto',
+            width:'420px'
+          }}
+        >
           {selectedTransaction && (
-            <Paper>
+            <Paper sx={{ padding: "12px 18px" }}>
               <Typography variant="h5">Detalles del pago</Typography>
 
               <p>ID: {selectedTransaction.id_pago}</p>
@@ -113,7 +120,7 @@ export const TransactionsList = ({ transacciones }) => {
               <p>Metodo de pago: {selectedTransaction.pedido.metodo_pago}</p>
             </Paper>
           )}
-        </div>
+        </Box>
       </Modal>
     </Paper>
   );
