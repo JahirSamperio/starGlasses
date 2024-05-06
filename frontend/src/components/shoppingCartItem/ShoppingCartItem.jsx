@@ -11,7 +11,8 @@ import {
 import React from "react";
 
 
-export default function ShoppingCartItem({id,nombre, price, handleRemoveFromCart}) {
+
+export default function ShoppingCartItem({id,nombre, price, handleRemoveFromCart,imagen}) {
 
 
 
@@ -26,13 +27,13 @@ export default function ShoppingCartItem({id,nombre, price, handleRemoveFromCart
       <CardActionArea sx={{ display: "flex  " }}> 
         <CardMedia
           component="img"
-          image="https://via.placeholder.com/150x150"
+          image={imagen}
           height="120"
           alt="Card Image"
           sx={{ width:'160px'}}
         />
         <CardContent sx={{flexGrow:1}} >
-          <Typography variant="h5">{name}</Typography>
+          <Typography variant="h5">{nombre}</Typography>
           <Typography variant="p" sx={{mt:'6px'}}>{price}</Typography>
         </CardContent>
       </CardActionArea>

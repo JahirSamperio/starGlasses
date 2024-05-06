@@ -74,7 +74,7 @@ export const AccountNavBar = ({ links }) => {
         }}
       >
         <Icon sx={{ margin: "8px auto", width: "auto", height: "auto" }}>
-          <Dashboard sx={{ width: "48px", height: "48px" }} />
+          
         </Icon>
         <Typography sx={{ margin: "0px auto" }}>Cuenta</Typography>
         <Divider />
