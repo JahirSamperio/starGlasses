@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Button,
   Drawer,
@@ -8,14 +10,54 @@ import {
   Box,
 } from "@mui/material";
 import NavListDrawer from "./NavListDrawer";
-import { useState } from "react";
 
 import { Menu, ShoppingBagRounded, AccountCircle } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import { ItemMenu } from "../itemMenu/ItemMenu";
+import { getItem } from "../../helpers/localStorage/getItem";
 
-export default function NavBar({ navArrayLinks }) {
+const navArrayLinks = [
+  {
+    title: "Inicio",
+    path: "/",
+    icon: null,
+  },
+  {
+    title: "Productos",
+    path: "/products-list",
+    icon: null,
+  },
+  {
+    title: "Recomendaciones",
+    path: "/appointments",
+    icon: null,
+  },
+];
+
+export default function NavBar({ links }) {
+  const { loginData, success, error } = useSelector(
+    (state) => state.users.login
+  );
+
   const [open, setOpen] = useState(false);
+  const [userId, setUserId] = useState(null);
+
+  const handleGetUserId = async () => {
+    const user = await getItem("USERID");
+
+    console.log(user);
+
+    if (user) {
+      setUserId(true);
+    } else {
+      setUserId(null);
+    }
+  };
+
+  useEffect(() => {
+    handleGetUserId();
+  }, []);
+
   return (
     <>
       <AppBar position="static">
@@ -52,15 +94,20 @@ export default function NavBar({ navArrayLinks }) {
             <Button component={NavLink} to={"/shopping-cart"}>
               <ShoppingBagRounded color="secondary" />
             </Button>
-            <Button
-              variant="contained"
-              component={NavLink}
-              color="secondary"
-              to={"/login"}
-            >
-              Iniciar sesión
-            </Button>
-            <ItemMenu />
+
+            {userId ? (
+              <></>
+            ) : (
+              <Button
+                variant="contained"
+                component={NavLink}
+                color="secondary"
+                to={"/login"}
+              >
+                Iniciar sesión
+              </Button>
+            )}
+            {userId ? <ItemMenu /> : <></>}
           </Box>
         </Toolbar>
       </AppBar>

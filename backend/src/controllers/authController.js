@@ -22,6 +22,7 @@ const autenticar = async (req = request, res = response) => {
 
         //Extraer datos
         const { email, password } = req.body;
+        console.log(email);
 
         //Verificar si el usuario existe
         const usuario = await Usuario.findOne({ where: { email } });
@@ -46,13 +47,12 @@ const autenticar = async (req = request, res = response) => {
         }
 
         //Autenticar usuario
-        const token = generarJWT(usuario.id_usuario);
+        const userId = usuario.id_usuario;
 
         //Almacenar en un cookie
-        return res.cookie('_token', token, {
-            httpOnly: true,
-            //secure: true
-        }).redirect('/homepage')
+        return res.status(200).json({
+            userId
+        })
 
     } catch (err) {
         console.log(err)

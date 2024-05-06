@@ -5,14 +5,19 @@ import {
   Menu,
   IconButton,
   Container,
+  Button,
 } from "@mui/material";
 import React, { useState } from "react";
 import { AccountCircle } from "@mui/icons-material";
 
 import { NavLink } from "react-router-dom";
 
+import { useNavigate } from "react-router-dom";
+import { removeItem } from "../../helpers/localStorage/removeItem";
+
 export const ItemMenu = () => {
 
+  const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -24,6 +29,13 @@ export const ItemMenu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleCloseUserSession = async () =>{
+
+    await removeItem('USERID');
+    navigate('/login');
+    
+  }
 
   return (
     <>
@@ -56,14 +68,14 @@ export const ItemMenu = () => {
         //   horizontal: "left",
         // }}
       >
-        <MenuItem component={NavLink} to={'/account/user/:id'} onClick={handleClose}>
+        <MenuItem component={NavLink} to={'/account/general'} onClick={handleClose}>
           Cuenta
         </MenuItem>
         <MenuItem component={NavLink} to={'/dashboard/main'} onClick={handleClose}>
           <ListItemText>Dashboard</ListItemText>
         </MenuItem>
         <MenuItem>
-          <ListItemText>Cerrar sesion</ListItemText>
+          <ListItemText><Button onClick={handleCloseUserSession}>Cerrar sesión</Button></ListItemText>
         </MenuItem>
       </Menu>
     </>

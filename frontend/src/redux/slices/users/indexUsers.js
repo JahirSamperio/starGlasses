@@ -8,5 +8,5 @@ export * from '../users/loginUserSlice';
 
 export const UsersReducer = combineReducers({
     new: registerUserSlice.reducer,
-    login: loginUserSlice
+    login: loginUserSlice.reducer
 })

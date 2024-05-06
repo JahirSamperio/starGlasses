@@ -1,4 +1,6 @@
 import {
+  Box,
+  Button,
   IconButton,
   Modal,
   Paper,
@@ -11,6 +13,11 @@ import {
 } from "@mui/material";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import React, { useState } from "react";
+import { ShipmentStateFilter } from '../dashboardOrders/ShipmentStateFilter'
+import { OrderStateFilter } from "./OrderStateFilter";
+
+
+
 
 export const OrdersList = ({ pedidos }) => {
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -24,7 +31,12 @@ export const OrdersList = ({ pedidos }) => {
   };
 
   return (
-    <Paper>
+    
+    <Paper sx={{display:'flex', flexDirection:'column', padding:'6px 8px'}}>
+      <Box sx={{display:'flex', gap:'18px', justifyContent:'flex-end' }}>
+        <ShipmentStateFilter/>
+        <OrderStateFilter/>
+      </Box>
       <Table>
         <TableHead>
           <TableRow>
@@ -66,17 +78,25 @@ export const OrdersList = ({ pedidos }) => {
 
       {/* modal component for order details */}
       <Modal open={selectedOrder !== null} onClose={handleCloseModal}>
-        <div>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            margin: "auto",
+            width: "420px",
+          }}
+        >
           {selectedOrder && (
-            <Paper>
+            <Paper sx={{ padding: "12px 18px" }}>
               <Typography variant="h6">Detalles del pedido</Typography>
               <h2>Detalles del Pedido</h2>
               <p>ID: {selectedOrder.id_pedido}</p>
               <p>Fecha: {selectedOrder.fecha_pedido}</p>
               <p>Estado: {selectedOrder.estado}</p>
               <p>
-                Nombre Usuario:{" "}
-                {selectedOrder.usuario_direccion.usuario.nombre}
+                Nombre Usuario: {selectedOrder.usuario_direccion.usuario.nombre}
               </p>
               <p>
                 Apellido Paterno:{" "}
@@ -89,7 +109,7 @@ export const OrdersList = ({ pedidos }) => {
               <p>Email: {selectedOrder.usuario_direccion.usuario.email}</p>
             </Paper>
           )}
-        </div>
+        </Box>
       </Modal>
     </Paper>
   );

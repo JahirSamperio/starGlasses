@@ -9,8 +9,28 @@ import CurrentOffers from "../../components/DASHBOARD-COMPONENTS/dashboardHome/C
 import MonthSales from "../../components/DASHBOARD-COMPONENTS/dashboardHome/MonthSales";
 
 
+import { getSalesToday} from '../../redux/actions/sales/getSalesTodayAction'
+ 
+import {useDispatch, useSelector} from 'react-redux';
+import { useEffect } from "react";
+import NavBar from "../../components/navBar/NavBar";
+
+
 export const Main = () => {
+  
+  const dispatch = useDispatch();
+  const {loading, success, error, salesTodayData} = useSelector((state) => state.sales.getTodays);
+  
+  useEffect(()=>{dispatch(getSalesToday())},[]);
+
+
+
+  
+
+
   return (
+    <>
+    <NavBar/>
     <Paper
       elevation={1}
       sx={{
@@ -68,7 +88,7 @@ export const Main = () => {
             }}
           >
             <RecentlyOrderedTable/>
-            <TodaySales/>
+            <TodaySales ventas={salesTodayData}/>
           </Box>
           <Box
             sx={{
@@ -88,5 +108,7 @@ export const Main = () => {
         </Paper>
       </Box>
     </Paper>
+    </>
+    
   );
 };

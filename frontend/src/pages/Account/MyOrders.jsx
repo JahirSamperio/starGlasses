@@ -1,14 +1,10 @@
 import { Box } from '@mui/material'
 import { AccountNavBar } from '../../components/ACCOUNT-COMPONENTS/AccountNavBar'
 import NavBar from '../../components/navBar/NavBar'
-
-import { navArrayLinks } from '../../helpers/navArrayLinks'
-
-
-export const Account = () => {
+export const MyOrders = () => {
   return (
     <>
-    <NavBar navArrayLinks={navArrayLinks}/>
+    <NavBar />
     <Box>
       <AccountNavBar/>
       <Box>

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import PersonAddAltOutlinedIcon from "@mui/icons-material/PersonAddAltOutlined";
 import { NavLink } from "react-router-dom";
+import NavBar from "../components/navBar/NavBar";
 
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +21,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { newUserSchema } from "../../validations/newUserSchema";
 import { registerUser } from "../redux/actions/users/registerUser";
+import { navArrayLinks } from "../helpers/navArrayLinks";
+
 
 export default function Register() {
   const { loading, success, error, userData } = useSelector(
@@ -40,7 +43,7 @@ export default function Register() {
     console.log(data);
     dispacth(registerUser(data)).then(() => {
       if(success){
-        navigate('email-verification-alert');
+        navigate('/email-verification-alert');
       }
     }).catch(error =>{
       console.log('error: ', error);
@@ -49,6 +52,7 @@ export default function Register() {
 
   return (
     <Grid>
+      <NavBar/>
       <Paper
         component="form"
         elevation={10}

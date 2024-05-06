@@ -1,14 +1,16 @@
 
 import  axios from 'axios';
-import { fetchGetSalesTodaySuccess,fetchGetSalesToday,fetchGetSalesTodayFailure } from '../../slices/sales/salesTodaySlice';
+import { fetchGetSalesToday,fetchGetSalesTodaySliceFailure, fetchGetSalesTodaySliceSuccess } from '../../slices/sales/salesTodaySlice';
     
 
 export const getSalesToday = () => async (dispatch) =>{
     try{
         dispatch(fetchGetSalesToday());
         const {data} = await axios.get(`http://localhost:8080/ventas/ventasHoy`);
-        dispatch(fetchGetSalesTodaySuccess(data.response));
+        console.log(data.ventas);
+        dispatch(fetchGetSalesTodaySliceSuccess(data.ventas));
+
     }catch(error){
-        dispatch(fetchGetSalesTodayFailure("Error al obtener las ventas de hoy"));
+        dispatch(fetchGetSalesTodaySliceFailure('error'));
     }
 }
