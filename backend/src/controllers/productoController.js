@@ -522,6 +522,33 @@ const newestProducts = async (req,res) => {
     }
 }
 
+const tipoCara = async (req, res) => {
+    try {
+        const {tipo_cara} = req.body;
+
+        const productos = await Producto.findAll({
+            include: [{
+                model: Precio
+            }],
+            where: { 
+                [Sequelize.Op.not]: {
+                    existencia: 0
+                }, 
+                tipo_cara
+            }
+        });
+
+        res.status(200).json({
+            productos
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
+
 
 
 export {
@@ -538,5 +565,6 @@ export {
     masVendido,
     eliminarOferta,
     modificarOferta,
-    newestProducts
+    newestProducts,
+    tipoCara
 }

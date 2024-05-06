@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getPedidos, detallesPedido, filtroPedido, actualizarEstado, pedidosRecientes } from '../controllers/pedidoController.js'
+import {getPedidos, detallesPedido, filtroPedido, actualizarEstado, pedidosRecientes, pedidoUsuario } from '../controllers/pedidoController.js'
 
 const router = Router();
 
@@ -12,5 +12,7 @@ router.get("/filtro", filtroPedido);
 router.put("/actualizarEstado/:id_pedido", actualizarEstado);
 
 router.get("/reciente", pedidosRecientes);
+
+router.get("/:id_usuario", pedidoUsuario);
 
 export default router;
