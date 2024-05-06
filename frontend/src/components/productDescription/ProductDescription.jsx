@@ -1,6 +1,10 @@
-import { Button, Container, IconButton, Typography } from "@mui/material";
-
+import React, { useState, useEffect } from "react";
+import { Button, Container, Typography } from "@mui/material";
 import { ShoppingCart } from "@mui/icons-material";
+import { getItem } from "../../helpers/localStorage/getItem";
+import { useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
+import { addToShoppingCart } from "../../redux/actions/shoppingCart/addToShoppingCart";
 
 export default function ProductDescription({
   nombre,
@@ -8,11 +12,42 @@ export default function ProductDescription({
   descripcion,
   handleAddToCart,
   oferta,
+  id_lentes,
 }) {
   const precio_ventaNum = parseFloat(precio_venta);
   const ofertaNum = parseFloat(oferta);
+  const [userID, setUserID] = useState(null);
+  const [showSnackbar, setShowSnackbar] = useState(false); // Variable local para controlar la Snackbar
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
-  const percentage = ofertaNum !== 0 ? ((ofertaNum / precio_ventaNum) * 100).toFixed(2) : 0;
+  useEffect(() => {
+    const loadUserID = async () => {
+      const id_usuario = await getItem("USERID");
+      setUserID(id_usuario);
+    };
+    loadUserID();
+  }, []);
+
+  useEffect(() => {
+    if (showSnackbar) {
+      enqueueSnackbar("Producto agregado al carrito", {
+        variant: "success",
+      });
+      setTimeout(() => {
+        setShowSnackbar(false); // Restablecer el estado de la Snackbar después de cierto tiempo
+      }, 3000); // 3000 milisegundos = 3 segundos
+    }
+  }, [showSnackbar, enqueueSnackbar]);
+
+  const handleAdd = async () => {
+    console.log("user ", userID, "lentes ", id_lentes);
+    dispatch(addToShoppingCart(userID, id_lentes));
+    setShowSnackbar(true); // Mostrar la Snackbar cuando se agrega el producto al carrito
+  };
+
+  const percentage =
+    ofertaNum !== 0 ? ((ofertaNum / precio_ventaNum) * 100).toFixed(2) : 0;
 
   return (
     <Container
@@ -38,7 +73,7 @@ export default function ProductDescription({
           }}
         >
           <Typography sx={{ mt: "18px" }}>
-            {precio_venta}
+            {`$ ${precio_venta}`}
             {ofertaNum !== 0 && (
               <Typography
                 component="span"
@@ -75,7 +110,7 @@ export default function ProductDescription({
           variant="contained"
           onClick={(e) => {
             e.preventDefault();
-            handleAddToCart(id, nombre, precio_venta);
+            handleAdd();
           }}
         >
           <ShoppingCart />

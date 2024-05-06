@@ -44,8 +44,8 @@ export default function NavBar({ links }) {
 
   const handleGetUserId = async () => {
     const user = await getItem("USERID");
+    const su = await getItem("privilegio");
 
-    console.log(user);
 
     if (user) {
       setUserId(true);
@@ -125,7 +125,5 @@ export default function NavBar({ links }) {
         />
       </Drawer>
     </>
-
-    //
   );
 }

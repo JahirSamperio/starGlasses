@@ -11,11 +11,13 @@ const AccountRoutes = () => {
   return (
     <Routes>
     <Route path="general" element={<General/>} />
+    <Route path="general/new-adress" element={<NewAdress/>}/>
+    
     <Route path="my-orders" element={<MyOrders/>} />
     <Route path="my-appointments" element={<MyAppointments/>}/>
     
-    <Route path="my-adresses" element={<Adresses/>}/>
-    <Route path="my-adresses/new-adress" element={<NewAdress/>}/>
+
+
   </Routes>
   )
 }

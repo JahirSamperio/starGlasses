@@ -33,6 +33,7 @@ export const ItemMenu = () => {
   const handleCloseUserSession = async () =>{
 
     await removeItem('USERID');
+    await removeItem('privilegio');
     navigate('/login');
     
   }

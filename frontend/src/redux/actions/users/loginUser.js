@@ -7,16 +7,16 @@ import {
 
 export const loginUser = (loginData) => async (dispatch) => {
   try {
-    const { data } = await axios.post(
+    const  data  = await axios.post(
       "http://localhost:8080/login/login",
       loginData
     );
-    console.log(data.userId);
+    console.log(data);
     //  console.log(data.response);
-    dispatch(fetchLoginUserSuccess(data.userId));
+    dispatch(fetchLoginUserSuccess(data.data));
   } catch (error) {
     console.log(error);
     dispatch(fetchLoginUserFailure("Error, usuario no encontrado"));
   }
-  console.log(loginData);
+
 };
