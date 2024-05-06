@@ -55,6 +55,9 @@ const Producto = conexion.define('producto_lentes', {
     },
     id_precio: {
         type: DataTypes.STRING,
+    }, 
+    tipo_cara: {
+        type: DataTypes.STRING,
     }
 })
 

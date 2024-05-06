@@ -127,6 +127,28 @@ const pedidosRecientes = async (req, res) => {
     }
 }
 
+const pedidoUsuario = async (req, res) => {
+    try {
+        const {id_usuario} = req.params
+        const pedido = await Pedido.findOne({
+            include: {
+                model: Direccion,
+                attributes: ['direccion']
+            },
+            attributes: ['id_pedido', 'fecha_pedido', 'estado'],
+            where: {id_usuario}
+        });
+
+        res.status(200).json({
+            pedido
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
+
 
 
 export {
@@ -134,5 +156,6 @@ export {
     detallesPedido,
     filtroPedido,
     actualizarEstado,
-    pedidosRecientes
+    pedidosRecientes,
+    pedidoUsuario
 }
