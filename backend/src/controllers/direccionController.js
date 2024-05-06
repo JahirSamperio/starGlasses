@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize';
-import { Producto, Precio, Pedido, Prod_pedido, Envio, Direccion } from '../models/asosiations.js'
+import { Producto, Precio, Pedido, Prod_pedido, Envio, Direccion, Usuario } from '../models/asosiations.js'
 import { generateId } from '../helpers/tokens.js';
 import { check, validationResult } from 'express-validator';
 
@@ -13,6 +13,7 @@ const agregarDireccion = async (req, res) => {
         await check('numero').notEmpty().withMessage('El número no puede estar vacío').run(req);
         await check('codigo_postal').notEmpty().withMessage('El código postal no puede estar vacío').run(req);
         await check('telefono_contacto').notEmpty().withMessage('El teléfono de contacto debe ser un número de teléfono válido en México').run(req);
+        await check('receptor').notEmpty().withMessage('El receptor no puede estar vacío').run(req);
 
         //Extraer id_usaurio del URL
         const { id_usuario } = req.params;
@@ -26,7 +27,7 @@ const agregarDireccion = async (req, res) => {
             });
         }
 
-        const { direccion, estado, ciudad, colonia, calle, numero, codigo_postal, telefono_contacto } = req.body;
+        const { direccion, estado, ciudad, colonia, calle, numero, codigo_postal, telefono_contacto, receptor } = req.body;
 
         const id_direccion = generateId();
 
@@ -40,7 +41,8 @@ const agregarDireccion = async (req, res) => {
             calle: calle,
             numero: numero,
             codigo_postal: codigo_postal,
-            telefono_contacto: telefono_contacto
+            telefono_contacto: telefono_contacto,
+            receptor: receptor
         })
 
         return res.status(200).json({
@@ -57,7 +59,7 @@ const agregarDireccion = async (req, res) => {
 const editarDireccion = async (req, res) => {
     try {
         const { id_direccion } = req.params
-        const { direccion, estado, ciudad, colonia, calle, numero, codigo_postal, telefono_contacto } = req.body;
+        const { direccion, estado, ciudad, colonia, calle, numero, codigo_postal, telefono_contacto, receptor} = req.body;
 
         const usuario_direccion = await Direccion.update({
             direccion: direccion,
@@ -67,7 +69,8 @@ const editarDireccion = async (req, res) => {
             calle: calle,
             numero: numero,
             codigo_postal: codigo_postal,
-            telefono_contacto: telefono_contacto
+            telefono_contacto: telefono_contacto,
+            receptor: receptor
         },
         {
             where: {
@@ -90,7 +93,14 @@ const editarDireccion = async (req, res) => {
 const getDireccion = async (req, res) => {
     try {
         const { id_usuario } = req.params
-        const direcciones = await Direccion.findAll({where: { id_usuario }});
+        const direcciones = await Direccion.findAll({
+            include: {
+                model: Usuario,
+                attributes: ['id_usuario', 'nombre', 'apellido_paterno', 'apellido_materno', 'telefono']
+            },            
+            attributes: ['direccion', 'codigo_postal', 'estado', 'ciudad', 'numero','id_direccion', 'receptor'],
+            where: { id_usuario }
+        });
 
         return res.status(200).json({
             direcciones
@@ -101,8 +111,25 @@ const getDireccion = async (req, res) => {
         })
     }
 }
+
+const eliminarDireccion = async (req,res) => {
+    try {
+        const {id_direccion} = req.params;
+
+        await Direccion.destroy({where: {id_direccion}})
+
+    } catch (error) {
+        console.log(
+            error
+        );
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
 export {
     agregarDireccion,
     editarDireccion,
-    getDireccion
+    getDireccion,
+    eliminarDireccion
 }

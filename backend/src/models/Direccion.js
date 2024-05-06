@@ -43,6 +43,10 @@ const Direccion = conexion.define('usuario_direccion', {
     telefono_contacto: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    receptor: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 })
 
