@@ -498,6 +498,29 @@ const modificarOferta = async (req, res) => {
     }
 }
 
+const newestProducts = async (req,res) => {
+    try {
+        const productos = await Producto.findAll({
+            include: [{
+                model: Precio
+            }],
+            order: [['createdAt', 'DESC']],
+            limit: 4,
+            where: { 
+                [Sequelize.Op.not]: {
+                    existencia: 0
+                }
+            }
+        });
+        res.status(200).json({
+            productos
+        })
+    } catch (error) {
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
 
 
 
@@ -514,5 +537,6 @@ export {
     ascStock,
     masVendido,
     eliminarOferta,
-    modificarOferta
+    modificarOferta,
+    newestProducts
 }

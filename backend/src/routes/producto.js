@@ -2,7 +2,7 @@ import {Router} from 'express';
 import { 
     newProduct, agregarOferta, eliminarProducto, modificarProducto, 
     perfilProducto, allProducts, allOffers, getStock, descStock, ascStock, 
-    masVendido, eliminarOferta, modificarOferta } from "../controllers/productoController.js";
+    masVendido, eliminarOferta, modificarOferta, newestProducts } from "../controllers/productoController.js";
 
 const router = Router();
 
@@ -31,6 +31,8 @@ router.get('/masVendido', masVendido);
 router.put('/eliminarOferta/:id_lentes', eliminarOferta);
 
 router.put('/modificarOferta/:id_lentes', modificarOferta);
+
+router.get('/newestProducts', newestProducts);
 
 
 export default router

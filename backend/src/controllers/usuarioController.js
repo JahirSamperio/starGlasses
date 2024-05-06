@@ -17,6 +17,31 @@ const userProfile = async (req, res) => {
     }
 }
 
+const modificarInfo = async (req, res) => {
+    try {
+        const {id_usuario} = req.params;
+        const {nombre, apellido_paterno, apellido_materno, telefono} = req.body;
+        
+        await Usuario.update({
+            nombre, 
+            apellido_paterno, 
+            apellido_materno, 
+            telefono
+        }, {
+            where: {id_usuario}
+        })
+
+        res.status(200).json({
+            msg: "Informacion modificada exitosamente"
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            error: "Error en el servidor"
+        })
+    }
+}
 export {
-    userProfile
+    userProfile,
+    modificarInfo
 }
