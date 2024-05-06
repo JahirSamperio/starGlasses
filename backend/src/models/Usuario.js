@@ -33,7 +33,9 @@ const Usuario = conexion.define('usuario', {
         allowNull: false
     },
     token: DataTypes.STRING,
-    confirmado: DataTypes.BOOLEAN
+    confirmado: DataTypes.BOOLEAN,
+    privilegio: DataTypes.BOOLEAN
+
 }, {
     hooks: {
         beforeCreate: async function(usuario){
