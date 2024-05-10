@@ -8,7 +8,6 @@ import { getItem } from "../helpers/localStorage/getItem";
 import NavBar from "../components/navBar/NavBar";
 import { removeFromShoppingCart } from "../redux/actions/shoppingCart/removeFromShoppingCart";
 
-
 export const ShoppingCart = () => {
   const dispatch = useDispatch();
 
@@ -16,12 +15,9 @@ export const ShoppingCart = () => {
     (state) => state.shoppingcart.get
   );
 
-
-  const {shoppingCartItemData} = useSelector((state)=> state.shoppingcart.remove);
-
-
-  
-
+  const { shoppingCartItemData } = useSelector(
+    (state) => state.shoppingcart.remove
+  );
 
   const [userID, setUserID] = useState(null);
   const [empty, setEmpty] = useState(true);
@@ -37,7 +33,6 @@ export const ShoppingCart = () => {
 
   useEffect(() => {
     if (userID) {
-      console.log(userID);
       dispatch(getShoppingCartAction(userID));
     }
   }, [userID]);
@@ -48,12 +43,20 @@ export const ShoppingCart = () => {
     }
   }, [success]);
 
+  useEffect(() => {
+    if (shoppingCartData.length === 0) {
+      setEmpty(true);
+    } else {
+      setEmpty(false);
+    }
+  }, [shoppingCartData]);
+
   const getFirstLinkFromProductList = () => {
     const linksArray = [];
     shoppingCartData.forEach((product, index) => {
-      // Obtener el primer enlace del producto
+      // Obtencion del enlace del producto
       const firstLink = product.producto_lente.imagen.split(",")[0].trim();
-      // Agregar un objeto con el índice y el primer enlace al array de enlaces
+      // Agregamos un objeto con el indice y el primer link
       linksArray.push({ index: index, link: firstLink });
     });
     return linksArray;
@@ -61,17 +64,24 @@ export const ShoppingCart = () => {
 
   const firstLinks = getFirstLinkFromProductList();
 
-  const [list, setList] = useState([]);
-
   // Maneja la eliminación de un elemento del carrito
   const handleRemoveItem = (id_cart) => {
-    dispatch()
-  };  
+    console.log(id_cart);
+    dispatch(removeFromShoppingCart(id_cart));
+    if (shoppingCartData.length === 0) {
+      setEmpty(true);
+    }
+  };
+
+  useEffect(() => {
+    // Actualizar el carrito después de eliminar un elemento
+    dispatch(getShoppingCartAction(userID));
+  }, [shoppingCartItemData]);
 
   const calculatePrices = (products) => {
     let productSum = 0;
 
-    // Calcular la suma total de los precios de los productos
+    //suma de productos
     products.forEach((product) => {
       const price = parseFloat(
         product.producto_lente.producto_lentes_precio.precio_venta
@@ -83,9 +93,9 @@ export const ShoppingCart = () => {
     const finalPrice = productSum + deliveryFee; // Precio final
 
     return {
-      productSum: productSum.toFixed(2), // Redondear el total de productos a 2 decimales
-      deliveryFee: deliveryFee.toFixed(2), // Redondear el costo de envío a 2 decimales
-      finalPrice: finalPrice.toFixed(2), // Redondear el precio final a 2 decimales
+      productSum: productSum.toFixed(2),
+      deliveryFee: deliveryFee.toFixed(2),
+      finalPrice: finalPrice.toFixed(2),
     };
   };
 
@@ -140,8 +150,7 @@ export const ShoppingCart = () => {
                   }
                   key={index}
                   imagen={firstLinks[index]?.link}
-                //  handleRemoveFromCart={}
-                  
+                  handleRemoveFromCart={() => handleRemoveItem(item.id_cart)}
                 />
               ))
             )}

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardActions,
@@ -8,39 +9,47 @@ import {
   Button,
   Typography,
 } from "@mui/material";
-import React from "react";
 
-
-
-export default function ShoppingCartItem({id,nombre, price, handleRemoveFromCart,imagen}) {
-
-
-
+export default function ShoppingCartItem({
+  id,
+  nombre,
+  price,
+  handleRemoveFromCart,
+  imagen,
+}) {
   return (
     <Card
       sx={{
-
         display: "flex",
-        mb:'12px'
+        marginBottom: 12,
       }}
     >
-      <CardActionArea sx={{ display: "flex  " }}> 
+      <CardActionArea sx={{ display: "flex" }}>
         <CardMedia
           component="img"
           image={imagen}
           height="120"
           alt="Card Image"
-          sx={{ width:'160px'}}
+          sx={{ width: "160px" }}
         />
-        <CardContent sx={{flexGrow:1}} >
+        <CardContent sx={{ flexGrow: 1 }}>
           <Typography variant="h5">{nombre}</Typography>
-          <Typography variant="p" sx={{mt:'6px'}}>{price}</Typography>
+          <Typography variant="body2" sx={{ marginTop: 6 }}>
+            {price}
+          </Typography>
         </CardContent>
       </CardActionArea>
 
       <CardActions>
-        <Button  sx={{mr:'16px'}}>ver</Button>
-        <Button variant="contained" color="error" sx={{mr:'16px'}} onClick={() => handleRemoveFromCart(id)}>Eliminar</Button>
+        <Button sx={{ marginRight: 16 }}>Ver</Button>
+        <Button
+          variant="contained"
+          color="error"
+          sx={{ marginRight: 16 }}
+          onClick={() => handleRemoveFromCart(id)}
+        >
+          Eliminar
+        </Button>
       </CardActions>
     </Card>
   );
