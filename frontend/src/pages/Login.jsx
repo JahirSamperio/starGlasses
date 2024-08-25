@@ -30,34 +30,33 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {loginData, success, error} = useSelector((state) => state.users.login);
+  const { loginData, success, error } = useSelector((state) => state.users.login);
 
   const handleUserLogin = (event) => {
-    event.preventDefault(); // Evitar el envío automático del formulario
+    event.preventDefault();
     const loginFormData = {
       email: event.target.email.value,
       password: event.target.password.value
     }
     dispatch(loginUser(loginFormData));
-    
+
   }
 
-    useEffect(()=>{console.log(loginData);},[loginData])
+  useEffect(() => { console.log(loginData); }, [loginData])
   useEffect(() => {
-    if(success === true) {
+    if (success === true) {
       setItem("USERID", loginData.userId);
-      setItem("privilegio",loginData.userPrivilegio);
+      setItem("privilegio", loginData.userPrivilegio);
       navigate('/')
-      console.log('ld',loginData);
     }
   }, [loginData])
 
 
-  
+
 
   return (
     <Grid>
-      <NavBar navArrayLinks={navArrayLinks}/>
+      <NavBar navArrayLinks={navArrayLinks} />
       <Paper
         component="form"
         elevation={10}

@@ -1,9 +1,9 @@
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-const initialState = {  
-    loading:false,
-    error:null,
-    success:false,
+const initialState = {
+    loading: false,
+    error: null,
+    success: false,
     userData: {}
 }
 
@@ -14,9 +14,9 @@ export const registerUserSlice = createSlice({
         fetchRegisterUser: (state, action) => {
             state.loading = true;
             state.error = null;
-            state. success = null
+            state.success = null
         },
-        fetchRegisterUserSuccess: (state, action) =>{
+        fetchRegisterUserSuccess: (state, action) => {
             state.loading = false;
             state.error = false;
             state.success = true;
@@ -25,6 +25,12 @@ export const registerUserSlice = createSlice({
             state.error = action.payload;
             state.loading = false;
             state.success = false;
+        },
+        reset: (state) => {
+            state.loading = false;
+            state.error = null;
+            state.success = false;
+            state.userData = null;
         }
     }
 });
@@ -32,5 +38,6 @@ export const registerUserSlice = createSlice({
 export const {
     fetchRegisterUser,
     fetchRegisterUserFailure,
-    fetchRegisterUserSuccess
+    fetchRegisterUserSuccess,
+    reset
 } = registerUserSlice.actions;

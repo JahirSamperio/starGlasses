@@ -20,17 +20,21 @@ import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { newUserSchema } from "../../validations/newUserSchema";
-import { registerUser } from "../redux/actions/users/registerUser";
-import { navArrayLinks } from "../helpers/navArrayLinks";
+import { registerUser, resetState } from "../redux/actions/users/registerUser";
+import { useEffect } from "react";
+import { useSnackbar } from "notistack";
 
 
 export default function Register() {
+  const { enqueueSnackbar } = useSnackbar();
   const { loading, success, error, userData } = useSelector(
     (state) => state.users.new
   );
-  const dispacth = useDispatch();
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // useEffect(() => dispatch(resetState()), []);
   const {
     register,
     handleSubmit,
@@ -40,19 +44,29 @@ export default function Register() {
   });
 
   const onSubmit = async (data) => {
-    console.log(data);
-    dispacth(registerUser(data)).then(() => {
-      if(success){
-        navigate('/email-verification-alert');
-      }
-    }).catch(error =>{
-      console.log('error: ', error);
+    dispatch(registerUser(data)).catch(error => {
+      enqueueSnackbar(error.response.data.msg, {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "top",
+          horizontal: "right",
+        },
+      });
     });
   };
 
+  useEffect(() => {
+    if (success) {
+      dispatch(resetState())
+      navigate('/email-verification-alert');
+    }
+  }, [success, navigate]);
+
+
+
   return (
     <Grid>
-      <NavBar/>
+      <NavBar />
       <Paper
         component="form"
         elevation={10}
@@ -113,19 +127,11 @@ export default function Register() {
             error={!!errors.lastNameM}
           />
         </Box>
-        {/* <DatePicker
-                label="Fecha de Nacimiento"
-                value={fechaNacimiento}
-                onChange={handleFechaNacimientoChange}
-                renderInput={(params) => <TextField {...params} />}
-                inputFormat="dd/MM/yyyy" // Formato de la fecha
-                fullWidth
-                required
-            /> */}
         <TextField
           {...register("telefono")}
           sx={{ mt: 2 }}
-          type="number"
+          type="tel"
+          pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
           id="phoneNumber"
           label="Número telefónico"
           variant="outlined"
@@ -154,6 +160,7 @@ export default function Register() {
               mt: 2,
             }}
             id="password"
+            type="password"
             label="Contraseña"
             variant="outlined"
             required
@@ -167,6 +174,7 @@ export default function Register() {
               ml: { sm: 1, xs: 0 }, // Espacio entre los TextField solo para sm
               mt: 2,
             }}
+            type="password"
             id="passwordConfirmation"
             label="Confirmar Contraseña"
             variant="outlined"

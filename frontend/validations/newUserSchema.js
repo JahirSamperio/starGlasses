@@ -8,7 +8,7 @@ export const newUserSchema = yup.object().shape({
   apellido_materno: yup.string(),
   telefono: yup
     .number("Formato incorrecto")
-    .required(`Número telefónico${requiredFieldMessage}`),
+    .required(`Número telefónico ${requiredFieldMessage}`),
   email: yup.string()
     .email("Correo electrónico inválido")
     .required(`Correo electronico ${requiredFieldMessage}`),

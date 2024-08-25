@@ -10,7 +10,6 @@ export default function ProductDescription({
   nombre,
   precio_venta,
   descripcion,
-  handleAddToCart,
   oferta,
   id_lentes,
 }) {
