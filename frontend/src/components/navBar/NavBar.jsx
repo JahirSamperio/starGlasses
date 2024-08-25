@@ -64,18 +64,18 @@ export default function NavBar({ links }) {
         <Toolbar>
           <IconButton
             onClick={() => setOpen(true)}
-            sx={{ display: { xs: "flex", sm: "none" } }}
+            sx={{ display: { md: "none", sm: "flex" } }}
           >
             <Menu color="inherit" fontSize="large" />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: { sm: 0.5, xs: 1 } }}>
+          <Typography variant="h6" sx={{ flexGrow: {  xs: 1 } }}>
             StarGlasses
           </Typography>
 
           <Box
             sx={{
-              display: { xs: "none", sm: "block" },
-              flexGrow: { xs: 1, sm: 0.5 },
+              display: { md: "block", xs: "none" },
+              flexGrow: { xs: 1 },
             }}
           >
             {navArrayLinks.map((item) => (
@@ -85,8 +85,8 @@ export default function NavBar({ links }) {
                 key={item.title}
                 to={item.path}
               >
-                {" "}
-                {item.title}{" "}
+
+                {item.title}
               </Button>
             ))}
           </Box>
