@@ -24,7 +24,7 @@ const emailRegistro = async (datos) => {
         html: `
             <h2>Hola ${nombre}, ¡Le damos la bienvenida a StarGlasses.com!</h2>
             <p>Para completar tu registro, por favor confirma tu cuenta haciendo clic en el siguiente enlace:</p>
-            <p><a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 3000}/login/confirmar/${token}" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Confirmar cuenta</a></p>
+            <p><a href="${process.env.FRONTEND_URL}:${process.env.FRONTEND_PORT ?? 5173}/account/confirmation/${token}" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Confirmar cuenta</a></p>
             <p>Si no te registraste en StarGlasses.com, puedes ignorar este correo electrónico.</p>
             <p>Gracias,<br>El equipo de StarGlasses.com</p>
         `
@@ -54,7 +54,7 @@ const emailResetPassword = async (datos) => {
             <p>Recibiste este correo porque solicitaste restablecer tu contraseña en StarGlasses.com.</p>
             <p>Hola ${nombre}</p>
             <p>Por favor, haz clic en el siguiente enlace para restablecer tu contraseña:</p>
-            <p><a href="${process.env.BACKEND_URL}:${process.env.PORT ?? 3000}/login/olvide-password/${token}" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Restablecer contraseña</a></p>
+            <p><a href="${process.env.FRONTEND_URL}:${process.env.FRONTEND_PORT ?? 5173}/login/olvide-password/${token}" style="background-color: #007bff; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Restablecer contraseña</a></p>
             <p>Si no solicitaste restablecer tu contraseña, puedes ignorar este correo electrónico.</p>
             <p>Gracias,<br>El equipo de StarGlasses.com</p>
         `

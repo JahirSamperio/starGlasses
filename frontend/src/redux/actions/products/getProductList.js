@@ -5,7 +5,7 @@ import { fetchGetProductListFailure, fetchGetProductList, fetchGetProductListSuc
 export const getProductListAction = () => async (dispatch) => {
     try {
         dispatch(fetchGetProductList());
-        await new Promise(resolve => setTimeout(resolve, 500))
+        await new Promise(resolve => setTimeout(resolve, 300))
         const { data } = await axiosClient.get('/producto/allProducts');
         dispatch(fetchGetProductListSuccess(data.productos));
 
