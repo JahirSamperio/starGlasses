@@ -4,15 +4,13 @@ import { fetchConfirmUser, fetchConfirmUserFailure, fetchConfirmUserSuccess, res
 export const confirmUserAction = (token) => async (dispatch) => {
     try {
         dispatch(fetchConfirmUser());
-        await new Promise(resolve => setTimeout(resolve, 150))
+        await new Promise(resolve => setTimeout(resolve, 200))
         const { data } = await axiosClient.get(`/login/confirmar/${token}`)
-        console.log(data);
         dispatch(fetchConfirmUserSuccess())
 
     } catch (error) {
 
         const errorMessage = error.response?.data?.msg || "Error al confirmar la cuenta, intente de nuevo.";
-        console.log(errorMessage);
         dispatch(fetchConfirmUserFailure(errorMessage));
 
     }

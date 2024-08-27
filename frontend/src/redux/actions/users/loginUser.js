@@ -7,7 +7,7 @@ import {
 
 export const loginUser = (loginData) => async (dispatch) => {
   try {
-    const  {data, }  = await axios.post(
+    const { data, } = await axios.post(
       "http://localhost:8080/login/login",
       loginData
     );
@@ -15,9 +15,9 @@ export const loginUser = (loginData) => async (dispatch) => {
 
     dispatch(fetchLoginUserSuccess(data));
   } catch (error) {
-    const {response} = await error;   
+    const { response } = await error;
 
-    error ? dispatch(fetchLoginUserFailure(response.data.msg)) : error = null;
+    error ? dispatch(fetchLoginUserFailure(response.data.msg)) : ("Error al iniciar sesión, intente de nuevo.");
   }
 
 };
