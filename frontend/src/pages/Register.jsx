@@ -31,10 +31,9 @@ export default function Register() {
     (state) => state.users.new
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();     
   const navigate = useNavigate();
 
-  // useEffect(() => dispatch(resetState()), []);
   const {
     register,
     handleSubmit,
@@ -45,7 +44,7 @@ export default function Register() {
 
   const onSubmit = async (data) => {
     dispatch(registerUser(data)).catch(error => {
-      enqueueSnackbar(error.response.data.msg, {
+      enqueueSnackbar(error?.response?.data?.msg || "Ocurrió un error desconocido",  {
         variant: "error",
         anchorOrigin: {
           vertical: "top",

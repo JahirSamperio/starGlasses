@@ -1,4 +1,5 @@
-import axios from 'axios';
+
+import axiosClient from '../../../config/axiosClient';
 import {
     fetchRegisterUser,
     fetchRegisterUserFailure,
@@ -11,7 +12,7 @@ export const registerUser = (dataForm) => async (dispatch) => {
     try {
         dispatch(fetchRegisterUser());
 
-        const { data } = await axios.post('http://localhost:8080/login/registro', dataForm);
+        const { data } = await axiosClient.post('/login/registro', dataForm);
         console.log(data);
         dispatch(fetchRegisterUserSuccess(data.response));
 

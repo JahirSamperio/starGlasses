@@ -21,6 +21,7 @@ import AccountRoutes from "./AccountRoutes";
 
 //context
 import { AuthContext, AuthConextProvider } from "../context/authContext";
+import AccountConfirmation from "../pages/AccountConfirmation";
 
 const navArrayLinks = [
   {
@@ -70,6 +71,7 @@ function App() {
               path="/email-verification-alert"
               element={<EmailVerification />}
             />
+            <Route path="/account/confirmation/:token" element={<AccountConfirmation/>} />
 
             {/* Rutas de la dashboard*/}
             <Route path="/dashboard/*" element={<DashboardRoutes />} />
