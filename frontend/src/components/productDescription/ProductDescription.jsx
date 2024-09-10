@@ -35,7 +35,7 @@ export default function ProductDescription({
       });
       setTimeout(() => {
         setShowSnackbar(false); // Restablecer el estado de la Snackbar después de cierto tiempo
-      }, 3000); // 3000 milisegundos = 3 segundos
+      }, 2500); // 3000 milisegundos = 3 segundos
     }
   }, [showSnackbar, enqueueSnackbar]);
 

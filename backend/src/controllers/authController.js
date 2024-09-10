@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { generateId, generarJWT } from "../helpers/tokens.js";
 import { emailRegistro, emailResetPassword } from "../helpers/emails.js";
 import stripe from 'stripe';
+import { path } from 'pdfkit';
 const stripeCliente = stripe(process.env.STRIPE_SECRET_KEY);
 
 //Autenticacion del usuario
@@ -49,12 +50,27 @@ const autenticar = async (req = request, res = response) => {
         //Autenticar usuario
         const userId = usuario.id_usuario;
         const userPrivilegio = usuario.privilegio;
+        const token = generarJWT({ userId, userPrivilegio })
+
 
         //Almacenar en un cookie
+        //1.acceso por http unicamente 2.en produccion solo se podra acceder por https 3.nos ayuda a verificar que rutas tendran la cookie disponible 4. evita el CSRF
+
+        res.cookie(
+            '_token', token, {
+            httpOnly: 'true',
+            // secure: process.env.NODE_ENV === 'production' === 'production',
+            path: '/',
+            sameSite: 'strict',
+
+        }
+        )
+
         return res.status(200).json({
+            msg: 'Autenticación exitosa',
             userId,
             userPrivilegio
-        })
+        });
 
     } catch (err) {
         console.log(err)
@@ -100,15 +116,15 @@ const registerController = async (req, res) => {
             name: nombre
         });
 
-        
+
         //Guarda el id del customer para hacer el checkout
         const usuario = await Usuario.create({
             id_usuario: usuarioStripe.id,
             nombre,
             email,
             password,
-            apellido_paterno, 
-            apellido_materno, 
+            apellido_paterno,
+            apellido_materno,
             telefono,
             token: generateId()
         });

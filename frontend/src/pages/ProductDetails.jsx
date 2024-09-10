@@ -80,7 +80,7 @@ function ProductDetails({}) {
             nombre={nombre}
             descripcion={descripcion}
             precio_venta={producto_lentes_precio ? producto_lentes_precio.precio_venta : ""}
-            oferta={producto_lentes_precio ? producto_lentes_precio.oferta : ""}
+            oferta={producto_lentes_precio ? producto_lentes_precio.oferta : " "}
             id_lentes={id_lentes}
           />
         </Container>
